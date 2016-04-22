@@ -15,14 +15,6 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * TUTORIAL PARA FUNCIONAR A API XSTREAM
- * Para funcionar o Xstream você deve adicionar o xstream-1.4.9.jar ao
- * seu projeto. Pelo NetBeans: Clique com o direito no projeto Kappa,
- * và em bibliotecas e adicione pasta/JAR e selecione o .jar que está 
- * na pasta XMLHandler
- */
-
 /**
  *
  * @author Simão Martin
