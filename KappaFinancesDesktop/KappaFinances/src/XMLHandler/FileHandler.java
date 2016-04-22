@@ -1,6 +1,6 @@
 package XMLHandler;
 
-import newpackage.*;
+import Financas.*;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.BufferedReader;
@@ -12,21 +12,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Scanner;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 import java.util.ArrayList;
 import java.util.List;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * TUTORIAL PARA FUNCIONAR A API XSTREAM
+ * Para funcionar o Xstream você deve adicionar o xstream-1.4.9.jar ao
+ * seu projeto. Pelo NetBeans: Clique com o direito no projeto Kappa,
+ * và em bibliotecas e adicione pasta/JAR e selecione o .jar que está 
+ * na pasta XMLHandler
  */
-
-
 
 /**
  *
@@ -34,20 +29,15 @@ import java.util.List;
  */
 public class FileHandler {
     
-    private String filepath;
-    private DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder docBuilder;
-    Document doc;
+    private final String filepath;
+    private String xml;
+    private final File fileXML;
     
     
-    FileHandler() throws IOException, ParserConfigurationException, SAXException
+    FileHandler() throws IOException
     {
-        this.docBuilder = docFactory.newDocumentBuilder();
-        filepath = "finances.xml";
-        
-        
-        System.out.println("Hello KIKO");
-        File fileXML = new File(this.filepath);
+        this.filepath = "finances.xml";
+        fileXML = new File(this.filepath);
         
         // Verifica se o arquivo XML já existe
         if(!fileXML.exists()){
@@ -64,86 +54,134 @@ public class FileHandler {
             
         }
         
-        doc = docBuilder.parse(filepath);
-        
-        if(fileXML.exists()){
-            System.out.println("\nAGORA EXISTE");
-
-        }
+        this.xml = this.readXML();  // Carrega o arquivo xml
     }
     
     /**
-     * Este método adiciona uma finança ao XML.
+     * Este método adiciona uma finança ao mês corrente no XML.
      * 
      * @param financa   A finança que será adicionada
-     * @throws SAXException
-     * @throws IOException 
+     * @return Retorna a ArrayList do mês atualizada
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
      */
-    public void addFinanca(Financa financa) throws SAXException, IOException
+    public ArrayList<Financa> addFinance(Financa financa) throws IOException, Exception
     {
-        Document doc = docBuilder.parse(filepath);
-        Calendar date = financa.date;
+        //Pega a data atual
+        Calendar date = Calendar.getInstance();
+        String month = this.intToMonth(date.get(Calendar.MONTH));
+        int year = date.get(Calendar.YEAR);
         
-        // Pega o ano da financa
-        //Node root = doc.getFirstChild();
-        //Node root2 = root.getFirstChild();
+        //Carrega e atualiza o vetor de financas do mês corrente
+        ArrayList<Financa> array = this.loadMonth(month, year);
+        array.add(financa);
         
-        //NodeList nodeList = root.getChildNodes();
-        //Node no = nodeList.item(0);
+        //Salva o mês atualizado no XML
+        this.saveLastMonth(array);
         
-        //System.out.println(no.getNodeName() + "\n:)\n" +nodeList.toString()); 
+        return array;
+    }
+    
+    /**
+     * Este método remove uma finança do mês corrente no XML.
+     * 
+     * @param i   indice da finança que será removida
+     * @return Retorna a ArrayList do mês atualizada
+     * @throws java.io.IOException
+     */
+    public ArrayList<Financa> removeFinance(int i) throws IOException, Exception
+    {
+        //Pega a data atual
+        Calendar date = Calendar.getInstance();
+        String month = this.intToMonth(date.get(Calendar.MONTH));
+        int year = date.get(Calendar.YEAR);
+        
+        //Carrega e atualiza o vetor de financas do mês corrente, removendo o item
+        ArrayList<Financa> array = this.loadMonth(month, year);
+        array.remove(i);
+        
+        //Salva o mês atualizado no XML
+        this.saveLastMonth(array);
+        
+        return array;
+    }
+    
+    /**
+     * Método para retornar a lista de Finanças de um mês de um
+     * determinado ano
+     * 
+     * @param month Mês desejado
+     * @param year Ano do mês desejado
+     * @return Caso exista o mês e o ano: Array com as Finanças
+     *         Caso não exista: null
+     */
+    public ArrayList<Financa> loadMonth(String month, int year)
+    {
+        //Cria stream para o XML
         XStream stream = new XStream(new DomDriver());
-        stream.autodetectAnnotations(true);
-        stream.alias("financa", Despesa.class);
-        List<Financa> array = new ArrayList<>();
+        stream.alias("financas", List.class);
+        stream.alias("receita", Receita.class);
+        stream.alias("despesa", Despesa.class);
+           
+        //Modifica formato de escrita da data
+        stream.registerConverter(new DateConverterTo());
         
-        Financa financa2 = new Despesa(2222, null);
+        //Procura pela posição do mês e do ano especificado
+        //e pega a substring que fica entre a tag dessa data 
+        //e o fechamento dessa tag, retornando ela como XML String
+        int x = xml.indexOf("<"+month+year+">");
+        if(x==-1)
+        {
+            // Não encontrou a data
+            return null;
+        }
+        int y = xml.indexOf("</"+month+year+">");
+        String financesXML = xml.substring(x+10, y);
+        System.out.println(financesXML);
+        ArrayList<Financa> retArray = (ArrayList<Financa>) stream.fromXML(financesXML);
         
-        array.add(financa);
-        array.add(financa2);
-        array.add(financa);
-        
-        System.out.println(stream.toXML(array));
-        
-        
-        //if(no==null)
-        //{
-         //   System.out.println("NAO EXISTE 2016");
-        //}
+        return retArray;
     }
-       
     
-    public void loadMonth(String month, int Year)
-    {
-        
-    }
-    
+    /**
+     * Método auxiliar para carregar o XML
+     * 
+     * @return String com o conteúdo do XML
+     */
     private String readXML()
     {
-        File fileXML = new File(this.filepath);
-        String linhaCat = "";
+        String allLines = "";
+        try 
+        { 
+            FileReader arq = new FileReader(fileXML);
+            BufferedReader lerArq = new BufferedReader(arq);
+            String line = lerArq.readLine();  // lê a primeira linha
         
-        try { FileReader arq = new FileReader(fileXML);
-        BufferedReader lerArq = new BufferedReader(arq);
-        String linha = lerArq.readLine(); 
-        // lê a primeira linha
-        
-        // a variável "linha" recebe o valor "null" quando o processo 
-        // de repetição atingir o final do arquivo texto
-        while (linha != null) { 
-            linhaCat = linhaCat.concat(linha+"\n");
-            linha = lerArq.readLine();
-        } // lê da segunda até a última linha 
+            // a variável "linha" recebe o valor "null" quando o processo 
+            // de repetição atingir o final do arquivo texto
+            while (line != null) 
+            { 
+                allLines = allLines.concat(line+"\n");
+                line = lerArq.readLine();
+            } 
             arq.close();
-        System.out.println(linhaCat);
         }
-    catch (IOException e) { 
-    System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); }
-        
-    return linhaCat;
+        catch (IOException e) 
+        { 
+            System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); 
+        }
+
+        return allLines;
     }
     
-    private String intToMonth(int m)
+    /**
+     * Função que transforma um inteiro em um mês do ano
+     * 
+     * 
+     * @param m Mês (int)
+     * @return Mês em inglês, só as 3 primeiras letras em maiúsculo
+     */
+    private String intToMonth(int m) throws Exception
     {
         String ret=null;
         if (m==0)
@@ -194,29 +232,78 @@ public class FileHandler {
         {
             ret="DEC";
         }
+        else
+        {
+            Exception e = new Exception("Month don't exists");
+            throw e;
+        }
         return ret;
     }
     
-    public void saveLastMonth(ArrayList<Financa> finances) throws FileNotFoundException
+    /**
+     * Salva o último mês de finanças no XML.
+     * 
+     * 
+     * @param finances Vetor de finanças do mês corrente
+     * @throws FileNotFoundException
+     */
+    public void saveLastMonth(ArrayList<Financa> finances) throws Exception
     {
+        // Cria o stream e gera apelidos para as tags do XML
+        XStream stream = new XStream(new DomDriver());
+        stream.alias("financas", List.class);
+        stream.alias("receita", Receita.class);
+        stream.alias("despesa", Despesa.class);
+           
+        //Modifica formato de escrita da data
+        stream.registerConverter(new DateConverterTo());
+        
+        //Gera mês e ano atual para atualizar o XML
         Calendar date = Calendar.getInstance();
         String month;
         String year;
         month = this.intToMonth(date.get(Calendar.MONTH));
         year = String.valueOf(date.get(Calendar.YEAR));
         
-        String xml = this.readXML();
-        int position = xml.indexOf(month+year);
         
+        //Verifica se o mês e o ano já existem no XML
+        //Caso exista: Atualiza o mês/ano
+        //Casoo não exista: Cria o mês/ano e já adiciona a finança
+        int position = xml.indexOf(month+year);
         if (position == -1)
         {
             System.out.println("ESSE MES NAO EXISTE");
+            xml = xml.replaceFirst("<list>\n", "<list>\n<"+month+year+">\n"+
+                   stream.toXML(finances)+"\n"+"</"+month+year+">\n" );
         }
         else
         {
             System.out.println("ESSE MES EXISTE na posicao " + position);
-            xml = xml.replaceAll("<"+month+year+">(\n|.)*</"+month+year+">\n", "");
-            System.out.println(xml);
+            xml = xml.replaceFirst("<"+month+year+">(\n|.)*</"+month+year+">\n", 
+                    "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
+            
         }
+        System.out.println(xml+"\n------------------\n");
+        
+        //Atualiza o arquivo XML
+        FileWriter fw = new FileWriter(fileXML);  
+        BufferedWriter bw = new BufferedWriter(fw);  
+        bw.write(xml);  
+        bw.flush();  
+        bw.close();  
+    }
+    
+    /**
+     * Método para pegar o ArrrayList de Financas do mês corrente
+     * 
+     * @return Caso exista ainda o mês corrente no XML: null
+     *         Caso exista: Array com as Finanças
+     * @throws Exception 
+     */
+    public ArrayList<Financa> loadCurrentMonth () throws Exception
+    {
+        Calendar date = Calendar.getInstance();
+        return this.loadMonth(this.intToMonth(date.get(Calendar.MONTH)),
+                (date.get(Calendar.YEAR)) );
     }
 }
