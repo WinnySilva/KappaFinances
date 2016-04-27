@@ -10,6 +10,12 @@ package Financas;
  *
  * @author Winny S
  */
-public class CetegoriaReceita {
+public class CategoriaReceita 
+{
     
+    private int x;
+    
+    
+    
+            
 }
