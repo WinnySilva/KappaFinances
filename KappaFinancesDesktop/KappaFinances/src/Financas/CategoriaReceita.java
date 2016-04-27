@@ -13,9 +13,8 @@ package Financas;
 public class CategoriaReceita 
 {
     
-    private int x;
     
+    static int salario = 1;
+    static int rendaAlternativa = 2;
     
-    
-            
-}
+ }
