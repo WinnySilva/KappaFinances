@@ -12,6 +12,25 @@ package Financas;
  */
 public class Contabilidade 
 {
+    private double saldoTotal;      // equivalente a valor entrada do diagrama de classes
+    private double despesasTotais;   // Equivalente a valor saida do diagrama de classes
+            
+    public Contabilidade()
+    {
+        saldoTotal = 0;
+        despesasTotais = 0;
+    }
     
+    public Contabilidade(double saldoTotal, double despesasTotais)
+    {
+        this.saldoTotal = saldoTotal;
+        this.despesasTotais = despesasTotais;
+        
+    }
+    
+    public double getSaldo()
+    {
+        return this.saldoTotal;
+    }
     
 }
