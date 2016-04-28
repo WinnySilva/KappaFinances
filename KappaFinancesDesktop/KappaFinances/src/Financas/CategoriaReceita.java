@@ -13,9 +13,27 @@ package Financas;
 public class CategoriaReceita 
 {
     
-    private int x;
+   private int categoriaReceita;
+   public static int salario = 1;
+   public static int rendaAlternativa = 2;
+   
+   public CategoriaReceita()
+   {
+       this.categoriaReceita = 0;
+   }
     
-    
-    
-            
-}
+   public CategoriaReceita(int categoria)
+   {
+       this.categoriaReceita = categoria;
+   }
+   
+   public void setCategoriaReceita(int categoria)
+   {
+       this.categoriaReceita = categoria;
+   }
+   
+   public int getCategoriaReceita()
+   {
+       return this.categoriaReceita;
+   }
+ }
