@@ -1,7 +1,8 @@
 package Financas;
+import XMLHandler.*;
 
 import java.util.Calendar;
-import java.util.Date;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,32 +16,41 @@ import java.util.Date;
  */
 public abstract class Financa 
 {
-    Date data;
-    double value;
+    protected Calendar data;
+    protected double value;
     
     public Financa()
     {
-      this.data = new Date();
+      Calendar data = Calendar.getInstance();
       this.value = 0;
     }
     
-    public Financa(int year, int month, int day, double value)
+    public Financa(Calendar date, double value)
     {
-        data = new Date(year, month, day);
+        int year, month, day;
+        
+        this.data = Calendar.getInstance();
+        year = date.get(Calendar.YEAR);
+        month = date.get(Calendar.MONTH);
+        day = date.get(Calendar.DAY_OF_MONTH);
+        this.data.set(year, month, day);
         this.value = value;
     }
-    /* Discussao ncessaria, a classe Date é obsoleta 
-    public void setDate(int year, int month, int day)
+
+    public void setDate(Calendar date)
     {
-        this.data.setYear(year);
-        this.data.setMonth(month);
-       // this.data.setDay(day);            LOL nao existe set date dafuq
+        int year, month, day;
+        
+        year = date.get(Calendar.YEAR);
+        month = date.get(Calendar.MONTH);
+        day = date.get(Calendar.DAY_OF_MONTH);
+        this.data.set(year, month, day);
     }
     
-    public Date getDate()
+    public Calendar getDate()
     {
-        return this.data.();
-    }*/
+        return this.data;
+    }
     
     public void setValue(int value)
     {
