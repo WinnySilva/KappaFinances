@@ -1,6 +1,7 @@
 package Financas;
 
-import java.util.Date;
+import java.util.Calendar;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,15 +21,26 @@ public class Receita extends Financa
     public Receita()
     {
         this.value = 0;
-        this.data = new Date();
+        this.data = Calendar.getInstance();
         receita = new CategoriaReceita();
     }
     
-    public Receita(int year, int month, int day, double value, int categoria)
+    public Receita(Calendar date, double value, int categoria)
     {
-        this.data = new Date(year, month, day);
+        int year, month, day;
+        
+        this.data = Calendar.getInstance();
+        year = date.get(Calendar.YEAR);
+        month = date.get(Calendar.MONTH);
+        day = date.get(Calendar.DAY_OF_MONTH);
+        this.data.set(year, month, day);
         this.value = value;
         receita = new CategoriaReceita(categoria);
+    }
+    
+    public void setCategoria(int categoria)
+    {
+        this.receita.setCategoriaReceita(categoria);
     }
     
 }
