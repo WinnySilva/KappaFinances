@@ -14,8 +14,10 @@ public class CategoriaReceita
 {
     
    private int categoriaReceita;
-   public static int salario = 1;
-   public static int rendaAlternativa = 2;
+    public enum categorias
+   {
+       SALARIO, RENDA_ALTERNATIVA;
+   }
    
    public CategoriaReceita()
    {
