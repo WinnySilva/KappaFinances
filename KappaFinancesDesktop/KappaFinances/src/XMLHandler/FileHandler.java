@@ -26,7 +26,7 @@ public class FileHandler {
     private final File fileXML;
     
     
-    FileHandler() throws IOException
+    public FileHandler() throws IOException
     {
         this.filepath = "finances.xml";
         fileXML = new File(this.filepath);
