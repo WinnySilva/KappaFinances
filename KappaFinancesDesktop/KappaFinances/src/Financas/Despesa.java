@@ -42,4 +42,9 @@ public class Despesa extends Financa
     {
         this.despesa.setCategoriaDespesa(categoria);
     }
+
+    @Override
+    public int getCategoria() {
+        return this.despesa.getCategoriaDespesa();
+    }
 }

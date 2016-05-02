@@ -60,7 +60,7 @@ public class GraficoBarra extends Relatorio {
         series1.getData().add(new XYChart.Data(italy, 35407.15));
         series1.getData().add(new XYChart.Data(usa, 12000));      
         */
-        Iterator<Dado> it = super.dados.iterator();
+        Iterator<Dado> it = super.despesas.iterator();
         Dado aux;
         while(it.hasNext()){
             aux = it.next();

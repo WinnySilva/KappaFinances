@@ -42,5 +42,10 @@ public class Receita extends Financa
     {
         this.receita.setCategoriaReceita(categoria);
     }
+
+    @Override
+    public int getCategoria() {
+        return this.receita.getCategoriaReceita();
+    }
     
 }
