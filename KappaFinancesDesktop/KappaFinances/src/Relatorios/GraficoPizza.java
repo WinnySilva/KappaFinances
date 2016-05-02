@@ -48,7 +48,7 @@ import javafx.scene.chart.PieChart;
     @Override
     public Chart geraGrafico() {
         ObservableList<PieChart.Data> pieChartData=FXCollections.observableArrayList();
-        Iterator<Dado> it = super.dados.iterator();
+        Iterator<Dado> it = super.despesas.iterator();
         Dado aux;
         while(it.hasNext()){
             aux = it.next();

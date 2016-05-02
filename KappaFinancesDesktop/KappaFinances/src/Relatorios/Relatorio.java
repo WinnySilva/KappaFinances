@@ -19,7 +19,8 @@ import javafx.scene.chart.Chart;
 public abstract class Relatorio extends Application implements Observer  {
     protected String titulo ="Despesas";
     protected Contabilidade contas;
-    protected ArrayList<Dado> dados;
+    protected ArrayList<Dado> despesas;
+    protected ArrayList<Dado> receitas;
     protected class Dado{
         public String categoria_s;
         public int categeria_i;
@@ -34,15 +35,24 @@ public abstract class Relatorio extends Application implements Observer  {
     protected enum despesas {
         vestuario, energia   
     }
+    Relatorio(Contabilidade con,String title){
+        this.contas = con;
+        this.titulo = title;
+    }
+    
+    
     Relatorio(Contabilidade con){
         this.contas = con;
+       
     }
+    
+    
     Relatorio(){
         Random r = new Random();
-      dados = new ArrayList();
+      despesas = new ArrayList();
       for(int i=0;i<10;i++){
         
-          dados.add(new Dado("Tenso"+r.nextInt(200),8,r.nextInt(700) ));
+          despesas.add(new Dado("Tenso"+r.nextInt(200),8,r.nextInt(700) ));
       }
     }
     public abstract Chart  geraGrafico();
@@ -50,24 +60,24 @@ public abstract class Relatorio extends Application implements Observer  {
      * @param financas
      * @return Dado
      */
-   protected ArrayList<Dado> mineracao(ArrayList<Financa> financas){
-       this.dados = new ArrayList();
+   protected void mineracao(ArrayList<Financa> financas){
+       this.despesas = new ArrayList();
        Iterator<Financa> it = financas.iterator();
-       Financa aux;
+       //auxiliares
+       Financa aux;Dado categorias; String cat;
        while(it.hasNext()){
            aux = it.next();
            if( (aux instanceof Receita ) ){
-              
-               
+               cat = CategoriaReceita.categorias.values()[aux.getCategoria()].name();
+               categorias = new Dado(cat,aux.getCategoria(),aux.getValue());
+                this.receitas.add(categorias);
            }else{
-               
+               cat = CategoriaDespesa.categorias.values()[aux.getCategoria()].name();
+               categorias = new Dado(cat ,aux.getCategoria(),aux.getValue());
+                this.despesas.add(categorias);
            }
        }
-       
-       
-       
-       
-       return this.dados;
+    
    }
        
         

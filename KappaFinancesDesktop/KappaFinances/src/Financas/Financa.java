@@ -61,5 +61,5 @@ public abstract class Financa
     {
         return this.value;
     }
-    
+    public abstract int getCategoria();
 }
