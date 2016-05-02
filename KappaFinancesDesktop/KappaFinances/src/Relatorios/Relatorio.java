@@ -3,6 +3,7 @@ package Relatorios;
 import Financas.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 import javafx.application.Application;
@@ -21,6 +22,13 @@ public abstract class Relatorio extends Application implements Observer  {
     protected Contabilidade contas;
     protected ArrayList<Dado> despesas;
     protected ArrayList<Dado> receitas;
+    public Chart grafico;
+
+    @Override
+    public void update(Observable o, Object arg) {
+        this.mineracao();
+        this.geraGrafico(); 
+    }
     protected class Dado{
         public String categoria_s;
         public int categeria_i;
@@ -39,8 +47,6 @@ public abstract class Relatorio extends Application implements Observer  {
         this.contas = con;
         this.titulo = title;
     }
-    
-    
     Relatorio(Contabilidade con){
         this.contas = con;
        
@@ -60,9 +66,10 @@ public abstract class Relatorio extends Application implements Observer  {
      * @param financas
      * @return Dado
      */
-   protected void mineracao(ArrayList<Financa> financas){
+   protected void mineracao(){
+       
        this.despesas = new ArrayList();
-       Iterator<Financa> it = financas.iterator();
+       Iterator<Financa> it = this.contas.getFinancas().iterator();  //= financas.iterator();
        //auxiliares
        Financa aux;Dado categorias; String cat;
        while(it.hasNext()){
@@ -79,6 +86,7 @@ public abstract class Relatorio extends Application implements Observer  {
        }
     
    }
+   
        
         
        

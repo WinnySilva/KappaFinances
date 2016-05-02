@@ -60,9 +60,11 @@ public class Contabilidade extends Observable
           }
           this.saldoTotal+= financa.getValue();
           this.despesasTotais+=financa.getValue();
+          
       }
       this.array.add(financa);
       this.fh.addFinance(financa);
+      notifyObservers();
     }
     public double getValorDespesa(){
         return this.despesasTotais;
@@ -73,9 +75,17 @@ public class Contabilidade extends Observable
     public void remVoid(int pos) throws Exception{
         this.array.remove(pos);
         this.fh.removeFinance(pos);
+        notifyObservers();
     }
     public ArrayList<Financa> getFinancas(){
         return this.array;
+    }
+    public Financa getFinanca(int pos){
+        return this.array.get(pos);
+    }
+    public void setFinanca(int pos, Financa nova){
+        this.array.set(pos, nova);
+        notifyObservers();
     }
     
    

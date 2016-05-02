@@ -35,12 +35,7 @@ public class GraficoBarra extends Relatorio {
     final static String france = "France";
     final static String italy = "Italy";
     final static String usa = "USA";
-  
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    
     @Override
     public Chart geraGrafico() {
         final CategoryAxis xAxis = new CategoryAxis();
