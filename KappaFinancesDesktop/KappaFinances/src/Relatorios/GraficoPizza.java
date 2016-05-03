@@ -1,14 +1,12 @@
 package Relatorios;
 import Financas.Contabilidade;
-import Relatorios.Relatorio;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
@@ -25,26 +23,20 @@ import javafx.scene.chart.PieChart;
  *
  * @author Winny S
  */
-public class GraficoPizza extends Relatorio{
-
-    public GraficoPizza(Contabilidade con) {
-        super(con);
-    }
+    public class GraficoPizza extends Relatorio{
     @Override
     public void  start(Stage stage) { 
         Scene scene = new Scene(new Group());
-        stage.setTitle("Imported Fruits");
+        stage.setTitle("Test");
         stage.setWidth(500);
         stage.setHeight(500);
         ((Group) scene.getRoot()).getChildren().add(this.geraGrafico());
         stage.setScene(scene);
         stage.show();
     }
- 
-   
     public static void main (String args[]){
-       // GraficoPizza x = new GraficoPizza();
-        Application.launch(args);
+        
+        launch(args);
     }
 
     /**
@@ -52,21 +44,22 @@ public class GraficoPizza extends Relatorio{
      * FXPanel ou Fx conteneiner
      * @return 
      */
+    //
     @Override
     public Chart geraGrafico() {
-        ObservableList<PieChart.Data> pieChartData =
-            FXCollections.observableArrayList(
-            new PieChart.Data("Salário", 130),
-            new PieChart.Data("Oranges", 25),
-            new PieChart.Data("Plums", 10),
-            new PieChart.Data("Pears", 22),
-            new PieChart.Data("Apples", 30));
+        ObservableList<PieChart.Data> pieChartData=FXCollections.observableArrayList();
+        Iterator<Dado> it = super.despesas.iterator();
+        Dado aux;
+        while(it.hasNext()){
+            aux = it.next();
+            pieChartData.add(new PieChart.Data(aux.categoria_s,aux.total ));
+        }
         final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Imported Fruits");
+        chart.setTitle(super.titulo);
+      //  chart.setScaleX(0.7);
+        //chart.setScaleY(0.7);
         return chart;
     }
-
-  
 
     
 }
