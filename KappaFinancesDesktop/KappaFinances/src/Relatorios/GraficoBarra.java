@@ -1,11 +1,15 @@
 package Relatorios;
 
 
+import Financas.CategoriaDespesa;
 import Financas.Contabilidade;
+import Financas.Despesa;
 import Relatorios.Relatorio;
 import java.awt.Graphics2D;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Observable;
+import static javafx.application.Application.launch;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -15,27 +19,18 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author Winny S
  */
 public class GraficoBarra extends Relatorio {
     private String labelX = "Categorias", labelY = "Valor(R$)",label = "Valor";
-    
-    
-    
-    final static String austria = "Austria";
-    final static String brazil = "Brazil";
-    final static String france = "France";
-    final static String italy = "Italy";
-    final static String usa = "USA";
+    XYChart.Series series1;
 
+    /*GraficoBarra(Contabilidade x) {
+        super(x);
+    }
+*/
     @Override
     public Chart geraGrafico() {
         final CategoryAxis xAxis = new CategoryAxis();
@@ -46,39 +41,54 @@ public class GraficoBarra extends Relatorio {
         xAxis.setLabel(labelX);       
         yAxis.setLabel(labelY);
  
-        XYChart.Series series1 = new XYChart.Series();
+        series1 = new XYChart.Series();
         series1.setName(label);       
-        /*
-        series1.getData().add(new XYChart.Data(austria, 25601.34));
-        series1.getData().add(new XYChart.Data(brazil, 20148.82));
-        series1.getData().add(new XYChart.Data(france, 10000));
-        series1.getData().add(new XYChart.Data(italy, 35407.15));
-        series1.getData().add(new XYChart.Data(usa, 12000));      
-        */
-        Iterator<Dado> it = super.despesas.iterator();
-        Dado aux;
-        while(it.hasNext()){
-            aux = it.next();
-            series1.getData().add(new XYChart.Data(aux.categoria_s,aux.total ));
+        for(int i=0;i<this.desp.length;i++){
+            series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
         }
-        
-        
         bc.getData().addAll(series1);
         return bc;
-    
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Bar Chart Sample");
-       
         Scene scene  = new Scene(this.geraGrafico(),800,600);
        // bc.getData().addAll(series1);
         stage.setScene(scene);
         stage.show();
     }
-     public static void main (String args[]){
-        
-        launch(args);
+     public static void main (String args[]) throws Exception{
+      Contabilidade x = new Contabilidade();
+      GraficoBarra gb = new GraficoBarra();
+      gb.contas=x;
+      x.addObserver(gb);
+       Despesa d;
+       int aux =CategoriaDespesa.categorias.values().length;
+       Calendar c = Calendar.getInstance();
+       double dl;
+       for(int i=0; i<10; i++){  
+           dl = (i+i*0.333);
+         
+           d = new Despesa(c,dl, CategoriaDespesa.categorias.values()[i%aux].ordinal());
+           x.addFinanca(d);
+       }
+
+     //  x.addObserver(gb);
+       launch(args);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("--");
+        mineracao();
+        if(series1==null){
+            series1= new XYChart.Series();
+        }
+        for(int i=0;i<this.desp.length;i++){
+            System.out.println("::::"+this.desp[i] );
+            series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+        }
+       
     }
 }
