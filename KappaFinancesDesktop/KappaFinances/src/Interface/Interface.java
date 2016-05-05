@@ -7,6 +7,7 @@ package Interface;
 
 import javax.swing.table.DefaultTableModel;
 import Financas.*;
+import java.util.Calendar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -26,6 +27,7 @@ public class Interface extends javax.swing.JFrame {
      */
     private DefaultComboBoxModel cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
     private DefaultComboBoxModel cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
+    
  
             
             
@@ -225,7 +227,7 @@ public class Interface extends javax.swing.JFrame {
 
         jButton4.setText("Data Atual");
 
-        txtValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###.00"))));
+        txtValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         txtValor.setInheritsPopupMenu(true);
         txtValor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -412,6 +414,14 @@ public class Interface extends javax.swing.JFrame {
         if (!this.txtValor.getText().isEmpty()) {
 
             tabela.addRow(dados);
+
+            Despesa tempDespesa = new Despesa(Calendar.getInstance(), Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")), 0);
+            try {
+                this.ContabilidadeInterface.addFinanca(tempDespesa);
+            }
+            catch (Exception e){
+                System.out.println("EXCESSAO FATAL DETECTADA");
+            }
                         
         }else{
             JOptionPane.showMessageDialog(null, "Insira um valor.");
