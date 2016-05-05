@@ -16,17 +16,15 @@ import javax.swing.DefaultComboBoxModel;
 public class Interface extends javax.swing.JFrame {
     private Contabilidade ContabilidadeInterface = new Contabilidade();
     /**
-     * Os proximos tres atributos sao utilizados pela lista txtListaFinancas para
+     * Os proximos dois atributos sao utilizados pela lista txtListaFinancas para
      * que a insercao das categorias possiveis sejam automatica.
      * DefaultComboBoxModel se refere ao conteudo dentro da lista. Entao, dois conteudos
-     * sao instanciados um para cada tipo de categoria. cbModelAtual apenas aponta
-     * para o tipo de categoria selecionada no momento, que serao visualizadas pela lista.
+     * sao instanciados um para cada tipo de categoria.
      * O tipo de categoria mostrada no momento, esta relacionada com aquela selecionada
      * pelos JradioButtons da interface.
      */
     private DefaultComboBoxModel cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
     private DefaultComboBoxModel cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
-    private DefaultComboBoxModel cbModelAtual;
  
             
             
@@ -44,8 +42,7 @@ public class Interface extends javax.swing.JFrame {
         // Inicializa os ComboBoxModels e inicializa txtListaFinancas com Despesas inicialmente
         this.cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
         this.cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
-        this.cbModelAtual = cbModelDespesa;
-        this.txtListaFinancas.setModel(cbModelAtual);
+        this.txtListaFinancas.setModel(this.cbModelDespesa);
     }
 
     /**
@@ -403,6 +400,7 @@ public class Interface extends javax.swing.JFrame {
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
+        // TODO CODIGO ESTRANHO. O QUE EH?
         DefaultTableModel dtmtabelas = (DefaultTableModel) jtabela.getModel();
         //@SuppressWarnings("LocalVariableHidesMemberVariable")
         //String[] info = (txtLista.getText());
@@ -410,13 +408,11 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_submitActionPerformed
 
     private void bdespesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdespesaActionPerformed
-        this.cbModelAtual = cbModelDespesa;
-        this.txtListaFinancas.setModel(cbModelAtual);
+        this.txtListaFinancas.setModel(this.cbModelDespesa);
     }//GEN-LAST:event_bdespesaActionPerformed
 
     private void breceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breceitaActionPerformed
-        this.cbModelAtual = cbModelReceita;
-        this.txtListaFinancas.setModel(cbModelAtual);
+        this.txtListaFinancas.setModel(this.cbModelReceita);
     }//GEN-LAST:event_breceitaActionPerformed
 
     /**
