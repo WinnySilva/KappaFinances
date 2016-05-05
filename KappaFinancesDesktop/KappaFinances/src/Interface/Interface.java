@@ -6,18 +6,46 @@
 package Interface;
 
 import javax.swing.table.DefaultTableModel;
+import Financas.*;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
  * @author fabio
  */
 public class Interface extends javax.swing.JFrame {
-
+    private Contabilidade ContabilidadeInterface = new Contabilidade();
+    /**
+     * Os proximos tres atributos sao utilizados pela lista txtListaFinancas para
+     * que a insercao das categorias possiveis sejam automatica.
+     * DefaultComboBoxModel se refere ao conteudo dentro da lista. Entao, dois conteudos
+     * sao instanciados um para cada tipo de categoria. cbModelAtual apenas aponta
+     * para o tipo de categoria selecionada no momento, que serao visualizadas pela lista.
+     * O tipo de categoria mostrada no momento, esta relacionada com aquela selecionada
+     * pelos JradioButtons da interface.
+     */
+    private DefaultComboBoxModel cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
+    private DefaultComboBoxModel cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
+    private DefaultComboBoxModel cbModelAtual;
+ 
+            
+            
+            
     /**
      * Creates new form Interface
      */
     public Interface() {
         initComponents();
+        
+        // Inicializa o grupo de botoes
+        this.btnGrpTipoFinanca.add(this.bdespesa);
+        this.btnGrpTipoFinanca.add(this.breceita);
+        
+        // Inicializa os ComboBoxModels e inicializa txtListaFinancas com Despesas inicialmente
+        this.cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
+        this.cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
+        this.cbModelAtual = cbModelDespesa;
+        this.txtListaFinancas.setModel(cbModelAtual);
     }
 
     /**
@@ -29,6 +57,7 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGrpTipoFinanca = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -43,14 +72,14 @@ public class Interface extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
-        txtLista = new javax.swing.JComboBox<>();
+        txtListaFinancas = new javax.swing.JComboBox<String>();
         submit = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         txtValor = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
+        jComboBox2 = new javax.swing.JComboBox<String>();
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
@@ -150,9 +179,20 @@ public class Interface extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados"));
 
+        bdespesa.setSelected(true);
         bdespesa.setText("Despesa");
+        bdespesa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bdespesaActionPerformed(evt);
+            }
+        });
 
         breceita.setText("Receita");
+        breceita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breceitaActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -166,9 +206,8 @@ public class Interface extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Obs:");
 
-        txtLista.setForeground(new java.awt.Color(0, 0, 0));
-        txtLista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECIONE", "VESTUARIO", "ENERGIA", "AGUA", "INTERNET", "ALUGUEL", "REMEDIOS", "LAZER", "EDUCACAO", "ALIMENTOS", "PRODUTOS_DOMESTICOS", "TRANSPORTE", "COMBUSTIVEL", "BENS_DURAVEIS" }));
-        txtLista.addActionListener(new java.awt.event.ActionListener() {
+        txtListaFinancas.setForeground(new java.awt.Color(0, 0, 0));
+        txtListaFinancas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
@@ -211,7 +250,7 @@ public class Interface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
-                        .addComponent(txtLista, 0, 272, Short.MAX_VALUE))
+                        .addComponent(txtListaFinancas, 0, 272, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -236,7 +275,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGap(53, 53, 53)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtListaFinancas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
@@ -258,9 +297,9 @@ public class Interface extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Relatórios"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton1.setText("Visualizar");
 
@@ -349,7 +388,6 @@ public class Interface extends javax.swing.JFrame {
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        getAccessibleContext().setAccessibleName("Kappa Finances");
         getAccessibleContext().setAccessibleDescription("Kappa Finances");
 
         pack();
@@ -360,16 +398,26 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
         DefaultTableModel dtmtabelas = (DefaultTableModel) jtabela.getModel();
-        @SuppressWarnings("LocalVariableHidesMemberVariable")
-        String[] info = (txtLista.getText());
-        dtmtabelas.addRow(info);
+        //@SuppressWarnings("LocalVariableHidesMemberVariable")
+        //String[] info = (txtLista.getText());
+        //dtmtabelas.addRow(info);
     }//GEN-LAST:event_submitActionPerformed
+
+    private void bdespesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdespesaActionPerformed
+        this.cbModelAtual = cbModelDespesa;
+        this.txtListaFinancas.setModel(cbModelAtual);
+    }//GEN-LAST:event_bdespesaActionPerformed
+
+    private void breceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breceitaActionPerformed
+        this.cbModelAtual = cbModelReceita;
+        this.txtListaFinancas.setModel(cbModelAtual);
+    }//GEN-LAST:event_breceitaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -409,6 +457,7 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton bdespesa;
     private javax.swing.JRadioButton breceita;
+    private javax.swing.ButtonGroup btnGrpTipoFinanca;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -429,7 +478,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTable jtabela;
     private javax.swing.JButton submit;
-    private javax.swing.JComboBox<String> txtLista;
+    private javax.swing.JComboBox<String> txtListaFinancas;
     private javax.swing.JFormattedTextField txtValor;
     // End of variables declaration//GEN-END:variables
 

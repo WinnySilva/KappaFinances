@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="btnGrpTipoFinanca">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="Kappa Finances"/>
   </Properties>
   <AccessibilityProperties>
-    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Kappa Finances"/>
     <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Kappa Finances"/>
   </AccessibilityProperties>
   <SyntheticProperties>
@@ -240,7 +243,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel6" linkSize="2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="txtLista" pref="272" max="32767" attributes="0"/>
+                              <Component id="txtListaFinancas" pref="272" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
@@ -270,7 +273,7 @@
                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtLista" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtListaFinancas" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -295,13 +298,20 @@
           <SubComponents>
             <Component class="javax.swing.JRadioButton" name="bdespesa">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Despesa"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bdespesaActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="breceita">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Receita"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="breceitaActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
@@ -338,28 +348,10 @@
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField4">
             </Component>
-            <Component class="javax.swing.JComboBox" name="txtLista">
+            <Component class="javax.swing.JComboBox" name="txtListaFinancas">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="14">
-                    <StringItem index="0" value="SELECIONE"/>
-                    <StringItem index="1" value="VESTUARIO"/>
-                    <StringItem index="2" value="ENERGIA"/>
-                    <StringItem index="3" value="AGUA"/>
-                    <StringItem index="4" value="INTERNET"/>
-                    <StringItem index="5" value="ALUGUEL"/>
-                    <StringItem index="6" value="REMEDIOS"/>
-                    <StringItem index="7" value="LAZER"/>
-                    <StringItem index="8" value="EDUCACAO"/>
-                    <StringItem index="9" value="ALIMENTOS"/>
-                    <StringItem index="10" value="PRODUTOS_DOMESTICOS"/>
-                    <StringItem index="11" value="TRANSPORTE"/>
-                    <StringItem index="12" value="COMBUSTIVEL"/>
-                    <StringItem index="13" value="BENS_DURAVEIS"/>
-                  </StringArray>
                 </Property>
               </Properties>
               <Events>
