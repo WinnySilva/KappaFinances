@@ -6,18 +6,44 @@
 package Interface;
 
 import javax.swing.table.DefaultTableModel;
+import Financas.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author fabio
  */
 public class Interface extends javax.swing.JFrame {
-
+    private Contabilidade ContabilidadeInterface = new Contabilidade();
+    /**
+     * Os proximos dois atributos sao utilizados pela lista txtListaFinancas para
+     * que a insercao das categorias possiveis sejam automatica.
+     * DefaultComboBoxModel se refere ao conteudo dentro da lista. Entao, dois conteudos
+     * sao instanciados um para cada tipo de categoria.
+     * O tipo de categoria mostrada no momento, esta relacionada com aquela selecionada
+     * pelos JradioButtons da interface.
+     */
+    private DefaultComboBoxModel cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
+    private DefaultComboBoxModel cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
+ 
+            
+            
+            
     /**
      * Creates new form Interface
      */
     public Interface() {
         initComponents();
+        
+        // Inicializa o grupo de botoes
+        this.btnGrpTipoFinanca.add(this.bdespesa);
+        this.btnGrpTipoFinanca.add(this.breceita);
+        
+        // Inicializa os ComboBoxModels e inicializa txtListaFinancas com Despesas inicialmente
+        this.cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
+        this.cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
+        this.txtListaFinancas.setModel(this.cbModelDespesa);
     }
 
     /**
@@ -29,6 +55,7 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGrpTipoFinanca = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -36,6 +63,8 @@ public class Interface extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        editar = new javax.swing.JLabel();
+        deletar = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         bdespesa = new javax.swing.JRadioButton();
         breceita = new javax.swing.JRadioButton();
@@ -43,7 +72,7 @@ public class Interface extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
-        txtLista = new javax.swing.JComboBox<>();
+        txtListaFinancas = new javax.swing.JComboBox<>();
         submit = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         txtValor = new javax.swing.JFormattedTextField();
@@ -58,43 +87,28 @@ public class Interface extends javax.swing.JFrame {
         setTitle("Kappa Finances");
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações"));
+        jPanel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel8MouseClicked(evt);
+            }
+        });
 
         jtabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Despesa ou Receita", "Valor"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jtabela);
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Saldo"));
@@ -124,8 +138,17 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/application_edit.png"))); // NOI18N
+
+        deletar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/cross.png"))); // NOI18N
+        deletar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deletarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -135,24 +158,44 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(editar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deletar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(editar)
+                    .addComponent(deletar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados"));
 
+        bdespesa.setSelected(true);
         bdespesa.setText("Despesa");
+        bdespesa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bdespesaActionPerformed(evt);
+            }
+        });
 
         breceita.setText("Receita");
+        breceita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breceitaActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -166,9 +209,8 @@ public class Interface extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Obs:");
 
-        txtLista.setForeground(new java.awt.Color(0, 0, 0));
-        txtLista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECIONE", "VESTUARIO", "ENERGIA", "AGUA", "INTERNET", "ALUGUEL", "REMEDIOS", "LAZER", "EDUCACAO", "ALIMENTOS", "PRODUTOS_DOMESTICOS", "TRANSPORTE", "COMBUSTIVEL", "BENS_DURAVEIS" }));
-        txtLista.addActionListener(new java.awt.event.ActionListener() {
+        txtListaFinancas.setForeground(new java.awt.Color(0, 0, 0));
+        txtListaFinancas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
@@ -184,6 +226,7 @@ public class Interface extends javax.swing.JFrame {
         jButton4.setText("Data Atual");
 
         txtValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###.00"))));
+        txtValor.setInheritsPopupMenu(true);
         txtValor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFormattedTextField1ActionPerformed(evt);
@@ -211,7 +254,7 @@ public class Interface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
-                        .addComponent(txtLista, 0, 272, Short.MAX_VALUE))
+                        .addComponent(txtListaFinancas, 0, 272, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -236,7 +279,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGap(53, 53, 53)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtListaFinancas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
@@ -302,9 +345,9 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -319,9 +362,9 @@ public class Interface extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jLabel5)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -332,7 +375,7 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -349,7 +392,6 @@ public class Interface extends javax.swing.JFrame {
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        getAccessibleContext().setAccessibleName("Kappa Finances");
         getAccessibleContext().setAccessibleDescription("Kappa Finances");
 
         pack();
@@ -360,16 +402,55 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel dtmtabelas = (DefaultTableModel) jtabela.getModel();
-        @SuppressWarnings("LocalVariableHidesMemberVariable")
-        String[] info = (txtLista.getText());
-        dtmtabelas.addRow(info);
+      
+        DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
+        Object[] dados = {this.txtListaFinancas.getSelectedItem(), this.txtValor.getText()};
+        if (!this.txtValor.getText().isEmpty()) {
+
+            tabela.addRow(dados);
+                        
+        }else{
+            JOptionPane.showMessageDialog(null, "Insira um valor.");
+            }
     }//GEN-LAST:event_submitActionPerformed
+
+    private void bdespesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdespesaActionPerformed
+        this.txtListaFinancas.setModel(this.cbModelDespesa);
+    }//GEN-LAST:event_bdespesaActionPerformed
+
+    private void breceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breceitaActionPerformed
+        this.txtListaFinancas.setModel(this.cbModelReceita);
+    }//GEN-LAST:event_breceitaActionPerformed
+
+    private void deletarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletarMouseClicked
+        
+        if (this.jtabela.getSelectedRow() != -1) {
+            
+            DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
+            tabela.removeRow(jtabela.getSelectedRow());
+        
+        }else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha para deletar.");
+        }
+        
+    }//GEN-LAST:event_deletarMouseClicked
+
+    private void jPanel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseClicked
+        
+         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
+         
+         if (this.jtabela.getSelectedRow() != -1) {
+             
+            tabela.setValueAt(this.txtListaFinancas.getSelectedItem(), jtabela.getSelectedRow(), 0);
+            tabela.setValueAt(this.txtValor.getText(), jtabela.getSelectedRow(), 1);
+         }else {
+             JOptionPane.showMessageDialog(null, "Selecione uma linha para editar.");
+         }
+    }//GEN-LAST:event_jPanel8MouseClicked
 
     /**
      * @param args the command line arguments
@@ -409,6 +490,9 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton bdespesa;
     private javax.swing.JRadioButton breceita;
+    private javax.swing.ButtonGroup btnGrpTipoFinanca;
+    private javax.swing.JLabel deletar;
+    private javax.swing.JLabel editar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -429,7 +513,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTable jtabela;
     private javax.swing.JButton submit;
-    private javax.swing.JComboBox<String> txtLista;
+    private javax.swing.JComboBox<String> txtListaFinancas;
     private javax.swing.JFormattedTextField txtValor;
     // End of variables declaration//GEN-END:variables
 
