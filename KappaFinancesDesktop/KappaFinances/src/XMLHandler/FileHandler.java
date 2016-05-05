@@ -60,12 +60,14 @@ public class FileHandler {
     public ArrayList<Financa> addFinance(Financa financa) throws IOException, Exception
     {
         //Pega a data atual
-        Calendar date = Calendar.getInstance();
+        Calendar date = financa.getDate();
         String month = this.intToMonth(date.get(Calendar.MONTH));
         int year = date.get(Calendar.YEAR);
         
         //Carrega e atualiza o vetor de financas do mês corrente
-        ArrayList<Financa> array = this.loadMonth(month, year);
+        ArrayList<Financa> array;
+        array = this.loadMonth(month, year);
+        System.out.println("array= " + array);
         array.add(financa);
         
         //Salva o mês atualizado no XML
@@ -105,7 +107,7 @@ public class FileHandler {
      * @param month Mês desejado
      * @param year Ano do mês desejado
      * @return Caso exista o mês e o ano: Array com as Finanças
-     *         Caso não exista: null
+     *         Caso não exista: arrayList vazio
      */
     public ArrayList<Financa> loadMonth(String month, int year)
     {
@@ -124,8 +126,9 @@ public class FileHandler {
         int x = xml.indexOf("<"+month+year+">");
         if(x==-1)
         {
-            // Não encontrou a data
-            return null;
+            //Não encontrou a data
+            ArrayList<Financa> retArray = new ArrayList<>();
+            return retArray;
         }
         int y = xml.indexOf("</"+month+year+">");
         String financesXML = xml.substring(x+10, y);

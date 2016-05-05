@@ -29,11 +29,13 @@ public class Contabilidade extends Observable
         saldoTotal = 0;
         despesasTotais = 0;
         receitasTotais = 0;
+        this.array = new ArrayList();
         try {
             fh = new FileHandler();
         } catch (IOException ex) {
             Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     public Contabilidade(double saldoTotal, double despesasTotais)
@@ -63,8 +65,12 @@ public class Contabilidade extends Observable
           
       }
       this.array.add(financa);
-      this.fh.addFinance(financa);
+      //this.fh.addFinance(financa);
+      //fh.saveLastMonth(array);
+      setChanged();
       notifyObservers();
+     
+      
     }
     public double getValorDespesa(){
         return this.despesasTotais;
@@ -74,7 +80,9 @@ public class Contabilidade extends Observable
     }
     public void remVoid(int pos) throws Exception{
         this.array.remove(pos);
-        this.fh.removeFinance(pos);
+        //this.fh.removeFinance(pos);
+       // fh.saveLastMonth(array);
+        setChanged();
         notifyObservers();
     }
     public ArrayList<Financa> getFinancas(){
@@ -85,6 +93,7 @@ public class Contabilidade extends Observable
     }
     public void setFinanca(int pos, Financa nova){
         this.array.set(pos, nova);
+        setChanged();
         notifyObservers();
     }
     
