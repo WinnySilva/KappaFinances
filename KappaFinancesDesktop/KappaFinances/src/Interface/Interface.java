@@ -452,10 +452,17 @@ public class Interface extends javax.swing.JFrame {
     private void deletarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletarMouseClicked
         
         if (this.jtabela.getSelectedRow() != -1) {
+            // Deleta do XML
+            try {
+                this.ContabilidadeInterface.remVoid(this.jtabela.getSelectedRow());
+            }
+            catch (Exception e) {
+                System.out.println("Excessao fatal reportada durante tentaiva de remocao de uma financa.");
+            }
             
+            // Deleta da tabela da interface
             DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
             tabela.removeRow(jtabela.getSelectedRow());
-        
         }else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha para deletar.");
         }
