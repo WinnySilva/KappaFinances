@@ -64,7 +64,7 @@ public class Interface extends javax.swing.JFrame {
         jtabela = new javax.swing.JTable();
         jPanel9 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        txtfSaldo = new javax.swing.JFormattedTextField();
         editar = new javax.swing.JLabel();
         deletar = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -74,14 +74,14 @@ public class Interface extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
-        txtListaFinancas = new javax.swing.JComboBox<>();
+        txtListaFinancas = new javax.swing.JComboBox<String>();
         submit = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         txtValor = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
+        jComboBox2 = new javax.swing.JComboBox<String>();
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
@@ -119,8 +119,8 @@ public class Interface extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setText("Saldo");
 
-        jFormattedTextField2.setEditable(false);
-        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        txtfSaldo.setEditable(false);
+        txtfSaldo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -130,7 +130,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGap(97, 97, 97)
                 .addComponent(jLabel18)
                 .addGap(18, 18, 18)
-                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -139,7 +139,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -303,9 +303,9 @@ public class Interface extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Relatórios"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton1.setText("Visualizar");
 
@@ -411,10 +411,10 @@ public class Interface extends javax.swing.JFrame {
         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
         Object[] dados = {this.txtListaFinancas.getSelectedItem(), this.txtValor.getText()};
         if (!this.txtValor.getText().isEmpty()) {
-            // Mostra a nova financa na interface grafica
+            // Insere a financa na tabela interface grafica
             tabela.addRow(dados);
             
-            // Gera o XML
+            // Insere a financa no XML
             Financa tempFinanca;
             if (this.bdespesa.isSelected()) {
                 Despesa tempDespesa = new Despesa(Calendar.getInstance(),
@@ -428,9 +428,10 @@ public class Interface extends javax.swing.JFrame {
                     tempFinanca = tempReceita;
             }
             
-            
             try {
                 this.ContabilidadeInterface.addFinanca(tempFinanca);
+                // Atualiza o saldo na Interface
+                this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
             }
             catch (Exception e){
                 System.out.println("EXCESSAO FATAL DETECTADA");
@@ -452,15 +453,17 @@ public class Interface extends javax.swing.JFrame {
     private void deletarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletarMouseClicked
         
         if (this.jtabela.getSelectedRow() != -1) {
-            // Deleta do XML
+            // Remove financa do XML
             try {
                 this.ContabilidadeInterface.remVoid(this.jtabela.getSelectedRow());
+                // Atualiza o saldo na Interface
+                this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
             }
             catch (Exception e) {
                 System.out.println("Excessao fatal reportada durante tentaiva de remocao de uma financa.");
             }
             
-            // Deleta da tabela da interface
+            // Remove financa da tabela da interface
             DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
             tabela.removeRow(jtabela.getSelectedRow());
         }else {
@@ -473,12 +476,30 @@ public class Interface extends javax.swing.JFrame {
         
          DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
          
-         if (this.jtabela.getSelectedRow() != -1) {
-             
+        if (this.jtabela.getSelectedRow() != -1) {
+            // Modifica financa no XML
+            Financa tempFinanca;
+            if (this.bdespesa.isSelected()) {
+                Despesa tempDespesa = new Despesa(Calendar.getInstance(),
+                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
+                    CategoriaDespesa.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
+                    tempFinanca = tempDespesa;
+            }else {
+                Receita tempReceita = new Receita(Calendar.getInstance(),
+                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
+                    CategoriaReceita.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
+                    tempFinanca = tempReceita;
+            }
+            this.ContabilidadeInterface.setFinanca(this.jtabela.getSelectedRow(), tempFinanca);
+            
+            // Modifica financa na tabela da interface
             tabela.setValueAt(this.txtListaFinancas.getSelectedItem(), jtabela.getSelectedRow(), 0);
             tabela.setValueAt(this.txtValor.getText(), jtabela.getSelectedRow(), 1);
-         }else {
-             JOptionPane.showMessageDialog(null, "Selecione uma linha para editar.");
+            
+            // Atualiza o saldo na Interface
+            this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
+         } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha para editar.");
          }
     }//GEN-LAST:event_jPanel8MouseClicked
 
@@ -527,7 +548,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -545,6 +565,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton submit;
     private javax.swing.JComboBox<String> txtListaFinancas;
     private javax.swing.JFormattedTextField txtValor;
+    private javax.swing.JFormattedTextField txtfSaldo;
     // End of variables declaration//GEN-END:variables
 
     private void getText() {
