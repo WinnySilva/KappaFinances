@@ -408,16 +408,29 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
-      
         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
         Object[] dados = {this.txtListaFinancas.getSelectedItem(), this.txtValor.getText()};
         if (!this.txtValor.getText().isEmpty()) {
-
+            // Mostra a nova financa na interface grafica
             tabela.addRow(dados);
-
-            Despesa tempDespesa = new Despesa(Calendar.getInstance(), Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")), 0);
+            
+            // Gera o XML
+            Financa tempFinanca;
+            if (this.bdespesa.isSelected()) {
+                Despesa tempDespesa = new Despesa(Calendar.getInstance(),
+                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
+                    CategoriaDespesa.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
+                    tempFinanca = tempDespesa;
+            }else {
+                Receita tempReceita = new Receita(Calendar.getInstance(),
+                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
+                    CategoriaReceita.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
+                    tempFinanca = tempReceita;
+            }
+            
+            
             try {
-                this.ContabilidadeInterface.addFinanca(tempDespesa);
+                this.ContabilidadeInterface.addFinanca(tempFinanca);
             }
             catch (Exception e){
                 System.out.println("EXCESSAO FATAL DETECTADA");
