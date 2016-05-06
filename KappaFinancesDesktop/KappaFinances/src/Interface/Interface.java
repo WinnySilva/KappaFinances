@@ -7,7 +7,12 @@ package Interface;
 
 import javax.swing.table.DefaultTableModel;
 import Financas.*;
+import XMLHandler.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -30,8 +35,7 @@ public class Interface extends javax.swing.JFrame {
     
  
             
-            
-            
+
     /**
      * Creates new form Interface
      */
@@ -46,8 +50,77 @@ public class Interface extends javax.swing.JFrame {
         this.cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
         this.cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
         this.txtListaFinancas.setModel(this.cbModelDespesa);
+        
+        // Le do XML as financas e adiciona elas a tabela da interface
+        FileHandler fh;
+        ArrayList<Financa> al;
+        try {
+            fh = new FileHandler();
+            al = fh.loadMonth(this.intToMonth(Calendar.getInstance().get(Calendar.MONTH)),
+                    Calendar.getInstance().get(Calendar.YEAR));
+            for (Financa f: al) {
+                DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
+                Object[] dados = {f.getCategoria(), f.getValue()};
+                tabela.addRow(dados);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private String intToMonth(int m)
+    {
+        String ret=null;
+        if (m==0)
+        {
+            ret="JAN";
+        }
+        else if (m==1)
+        {
+            ret="FEB";
+        }
+        else if (m==2)
+        {
+            ret="MAR";
+        }
+        else if (m==3)
+        {
+            ret="APR";
+        }
+        else if (m==4)
+        {
+            ret="MAY";
+        }
+        else if (m==5)
+        {
+            ret="JUN";
+        }
+        else if (m==6)
+        {
+            ret="JUL";
+        }
+        else if (m==7)
+        {
+            ret="AUG";
+        }
+        else if (m==8)
+        {
+            ret="SEP";
+        }
+        else if (m==9)
+        {
+            ret="OCT";
+        }
+        else if (m==10)
+        {
+            ret="NOV";
+        }
+        else if (m==11)
+        {
+            ret="DEC";
+        }
+        return ret;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
