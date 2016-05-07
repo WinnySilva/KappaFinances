@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import Financas.*;
 import XMLHandler.*;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -58,67 +59,41 @@ public class Interface extends javax.swing.JFrame {
             fh = new FileHandler();
             al = fh.loadMonth(this.intToMonth(Calendar.getInstance().get(Calendar.MONTH)),
                     Calendar.getInstance().get(Calendar.YEAR));
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
             for (Financa f: al) {
                 DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
-                Object[] dados = {f.getCategoria(), f.getValue()};
-                tabela.addRow(dados);
+                if (f instanceof Despesa) {
+                    Object[] dados = {CategoriaDespesa.categorias.values()[f.getCategoria()], nf.format(f.getValue()*-1)};
+                    tabela.addRow(dados);
+                }
+                else {
+                    Object[] dados = {CategoriaReceita.categorias.values()[f.getCategoria()], nf.format(f.getValue())};
+                    tabela.addRow(dados);
+                }
+                this.ContabilidadeInterface.addFinanca(f);
             }
         } catch (IOException ex) {
             Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println("EXCESSAO FATAL DETECTADA");
         }
     }
 
     private String intToMonth(int m)
     {
         String ret=null;
-        if (m==0)
-        {
-            ret="JAN";
-        }
-        else if (m==1)
-        {
-            ret="FEB";
-        }
-        else if (m==2)
-        {
-            ret="MAR";
-        }
-        else if (m==3)
-        {
-            ret="APR";
-        }
-        else if (m==4)
-        {
-            ret="MAY";
-        }
-        else if (m==5)
-        {
-            ret="JUN";
-        }
-        else if (m==6)
-        {
-            ret="JUL";
-        }
-        else if (m==7)
-        {
-            ret="AUG";
-        }
-        else if (m==8)
-        {
-            ret="SEP";
-        }
-        else if (m==9)
-        {
-            ret="OCT";
-        }
-        else if (m==10)
-        {
-            ret="NOV";
-        }
-        else if (m==11)
-        {
-            ret="DEC";
-        }
+        if (m==0) ret="JAN";
+        else if (m==1) ret="FEB";
+        else if (m==2) ret="MAR";
+        else if (m==3) ret="APR";
+        else if (m==4) ret="MAY";
+        else if (m==5) ret="JUN";
+        else if (m==6) ret="JUL";
+        else if (m==7) ret="AUG";
+        else if (m==8) ret="SEP";
+        else if (m==9) ret="OCT";
+        else if (m==10) ret="NOV";
+        else if (m==11) ret="DEC";
         return ret;
     }
     /**
@@ -482,7 +457,8 @@ public class Interface extends javax.swing.JFrame {
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
-        Object[] dados = {this.txtListaFinancas.getSelectedItem(), this.txtValor.getText()};
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        Object[] dados = {this.txtListaFinancas.getSelectedItem(), nf.format(Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")))};
         if (!this.txtValor.getText().isEmpty()) {
             // Insere a financa na tabela interface grafica
             tabela.addRow(dados);
@@ -566,8 +542,9 @@ public class Interface extends javax.swing.JFrame {
             this.ContabilidadeInterface.setFinanca(this.jtabela.getSelectedRow(), tempFinanca);
             
             // Modifica financa na tabela da interface
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
             tabela.setValueAt(this.txtListaFinancas.getSelectedItem(), jtabela.getSelectedRow(), 0);
-            tabela.setValueAt(this.txtValor.getText(), jtabela.getSelectedRow(), 1);
+            tabela.setValueAt(nf.format(Double.parseDouble(this.txtValor.getText().replaceAll(",", "."))), jtabela.getSelectedRow(), 1);
             
             // Atualiza o saldo na Interface
             this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
