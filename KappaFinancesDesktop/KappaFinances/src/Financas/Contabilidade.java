@@ -65,8 +65,8 @@ public class Contabilidade extends Observable
           
       }
       this.array.add(financa);
-      //this.fh.addFinance(financa);
-      //fh.saveLastMonth(array);
+      this.fh.addFinance(financa);
+      fh.saveLastMonth(array);
       setChanged();
       notifyObservers();
      
@@ -80,8 +80,8 @@ public class Contabilidade extends Observable
     }
     public void remVoid(int pos) throws Exception{
         this.array.remove(pos);
-        //this.fh.removeFinance(pos);
-       // fh.saveLastMonth(array);
+        this.fh.removeFinance(pos);
+        fh.saveLastMonth(array);
         setChanged();
         notifyObservers();
     }
