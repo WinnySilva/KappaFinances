@@ -59,9 +59,8 @@ public abstract class Relatorio extends Application implements Observer  {
        Financa aux;
        while(it.hasNext()){
            aux = it.next();
-           System.out.println(+aux.getCategoria()+":"+desp[aux.getCategoria()]);
            if( (aux instanceof Despesa ) ){
-               this.desp[aux.getCategoria()] +=aux.getValue();
+               this.desp[aux.getCategoria()] += -aux.getValue();
                
            }
        }

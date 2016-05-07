@@ -80,7 +80,6 @@ public class GraficoBarra extends Relatorio {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("--");
         mineracao();
         if(series1==null){
             series1= new XYChart.Series();
