@@ -1,7 +1,7 @@
 package Financas;
 import XMLHandler.*;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,15 +24,18 @@ public class Contabilidade extends Observable
     private ArrayList<Financa> array;
     private FileHandler fh;
     
+    
     public Contabilidade()
     {
         saldoTotal = 0;
         despesasTotais = 0;
         receitasTotais = 0;
         this.array = new ArrayList();
+        
         try {
             fh = new FileHandler();
             this.array = fh.loadCurrentMonth();
+            carregarValores();
         } catch (Exception ex) {
             Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
             this.array = new ArrayList();
@@ -47,12 +50,33 @@ public class Contabilidade extends Observable
         this.despesasTotais = despesasTotais;
         
     }
+    /**
+     * Funcao para pegar da propria classe percorrer e atribuir os valores de saldo, total
+     * de despesa e total de receitas.
+     * OBS: este deve ser a primeira coisa a ser feita, pois assume que o vetor está vazio
+     * @param fin 
+     */
+    private synchronized  void carregarValores(){
+        Iterator<Financa> it= this.array.iterator();
+        Financa aux;
+        while(it.hasNext()){
+            aux = it.next();
+            this.saldoTotal += aux.getValue();
+            if(aux instanceof Receita){
+                this.receitasTotais += aux.getValue();
+            }else{
+                this.despesasTotais +=aux.getValue();
+            }
+            
+        }
+    }
+    
     public double getSaldo()
     {
         return this.saldoTotal;
     }
     
-    public void addFinanca(Financa financa) throws Exception
+    public synchronized  void addFinanca(Financa financa) throws Exception
     {
         double financaValor;
         financaValor = financa.getValue();
@@ -83,7 +107,7 @@ public class Contabilidade extends Observable
     public double getValorReceita(){
         return this.receitasTotais;
     }
-    public void remVoid(int pos) throws Exception{
+    public synchronized void remVoid(int pos) throws Exception{
         Financa deletavel;
         
         deletavel = this.array.get(pos);
@@ -94,9 +118,6 @@ public class Contabilidade extends Observable
           this.receitasTotais -= deletavel.getValue();
           
       }else{
-          if(deletavel.getValue()>0){
-              deletavel.setValue(-deletavel.getValue());
-          }
           this.saldoTotal -= deletavel.getValue();
           this.despesasTotais -= deletavel.getValue();
         }
@@ -109,10 +130,10 @@ public class Contabilidade extends Observable
     public ArrayList<Financa> getFinancas(){
         return this.array;
     }
-    public Financa getFinanca(int pos){
+    public synchronized  Financa getFinanca(int pos){
         return this.array.get(pos);
     }
-    public void setFinanca(int pos, Financa nova){
+    public synchronized  void setFinanca(int pos, Financa nova){
         Financa editavel;
         
         editavel = this.array.get(pos);
@@ -134,6 +155,8 @@ public class Contabilidade extends Observable
       }
          
         this.array.set(pos, nova);
+        fh.removeFinance(pos);
+        fh.addFinance(nova);
         setChanged();
         notifyObservers();
     }

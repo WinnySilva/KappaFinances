@@ -1,5 +1,6 @@
 package Relatorios;
 import Financas.CategoriaDespesa;
+import Financas.CategoriaReceita;
 import Financas.Contabilidade;
 import java.util.Observable;
 import javafx.collections.FXCollections;
@@ -23,9 +24,10 @@ import javafx.scene.chart.PieChart;
     public class GraficoPizza extends Relatorio{
     ObservableList<PieChart.Data> pieChartData;
     
-    GraficoPizza(Contabilidade con,String title){
-        super(con, title);
+    GraficoPizza(Contabilidade con,int tipo){
+        super(con, tipo);
     }
+    
     GraficoPizza(Contabilidade con){
         super(con);
     }
@@ -52,37 +54,42 @@ import javafx.scene.chart.PieChart;
     public Chart geraGrafico() {
        pieChartData=FXCollections.observableArrayList();
         
-        for(int i=0;i<this.desp.length;i++){
+       /* for(int i=0;i<this.desp.length;i++){
             pieChartData.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+        }*/
+        if(this.tipo== Relatorio.DESPESA){
+            for(int i=0;i<this.desp.length;i++){
+            this.pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+           }
+        }else{
+            for(int i=0;i<this.desp.length;i++){
+            this.pieChartData.set(i, new PieChart.Data(""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
+            }
         }
+       
         PieChart chart = new PieChart(pieChartData); 
         chart.setTitle(super.titulo);
-      //  chart.setScaleX(0.7);
-        //chart.setScaleY(0.7);
-        this.grafico = chart; 
+        this.grafico = chart;
         return chart;
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        mineracao();
         
-        /*if(pieChartData == null){
-            pieChartData=FXCollections.observableArrayList();
+        if(this.tipo== Relatorio.DESPESA){
             for(int i=0;i<this.desp.length;i++){
-            pieChartData.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
-        }
-        }
-        
-        mineracao();
-        for(int i=0;i<this.desp.length;i++){
-            System.out.println("$$$"+desp[i]);
-            pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
-        }*/
-        mineracao();
-        for(int i=0;i<this.desp.length;i++){
             this.pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
-            //novo_val.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+           }
+        }else{
+            for(int i=0;i<this.desp.length;i++){
+            this.pieChartData.set(i, new PieChart.Data(""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
+            }
         }
+            
+            
+        
+        
         
 
    

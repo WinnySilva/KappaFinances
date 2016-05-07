@@ -31,7 +31,7 @@ public class JavaChartDemo {
 class ChartFrame extends JFrame {
    
       Contabilidade x = new Contabilidade();
-      GraficoPizza gb = new GraficoPizza(x); //new GraficoBarra();
+      GraficoPizza gb = new GraficoPizza(x,1); //new GraficoBarra();
     
   JFXPanel fxPanel;
   public ChartFrame(){
@@ -51,7 +51,7 @@ class ChartFrame extends JFrame {
              for(int i=0; i<100; i++){
                  dl = sc.nextDouble();
                  aux = sc.nextInt();
-                 final Despesa d = new Despesa(c,dl,aux/*CategoriaDespesa.categorias.values()[i%aux].ordinal()*/);
+                 final Despesa d = new Despesa(c,dl,aux);
                  
                  Platform.runLater(new Runnable() {
                      @Override

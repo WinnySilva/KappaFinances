@@ -23,8 +23,8 @@ public class GraficoBarra extends Relatorio {
     private String labelX = "Categorias", labelY = "Valor(R$)",label = "Valor";
     XYChart.Series series1;
 
-    GraficoBarra(Contabilidade con,String title){
-        super(con, title);
+    GraficoBarra(Contabilidade con,int tipo){
+        super(con, tipo);
     }
     GraficoBarra(Contabilidade con){
         super(con);
@@ -84,10 +84,20 @@ public class GraficoBarra extends Relatorio {
         if(series1==null){
             series1= new XYChart.Series();
         }
+        
+        if(true){
+            
+        }else{
+            
+        }
+        
         for(int i=0;i<this.desp.length;i++){
             System.out.println("::::"+this.desp[i] );
             series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
         }
        
+        
+        
+        
     }
 }
