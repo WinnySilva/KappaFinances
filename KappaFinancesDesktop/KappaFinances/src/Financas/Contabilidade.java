@@ -52,21 +52,24 @@ public class Contabilidade extends Observable
     
     public void addFinanca(Financa financa) throws Exception
     {
+        double financaValor;
+        financaValor = financa.getValue();
+        
       if(financa instanceof Receita){
-          this.saldoTotal+= financa.getValue();
-          this.receitasTotais+=financa.getValue();
+          this.saldoTotal+= financaValor;
+          this.receitasTotais+= financaValor;
           
       }else{
           if(financa.getValue()>0){
-              financa.setValue(-financa.getValue());
+              financa.setValue(-(financaValor));
           }
-          this.saldoTotal+= financa.getValue();
-          this.despesasTotais+=financa.getValue();
+          this.saldoTotal+= -(financaValor);
+          this.despesasTotais+= -(financaValor);
           
       }
       this.array.add(financa);
-      //this.fh.addFinance(financa);
-      //fh.saveLastMonth(array);
+      this.fh.addFinance(financa);
+      fh.saveLastMonth(array);
       setChanged();
       notifyObservers();
      
@@ -79,9 +82,25 @@ public class Contabilidade extends Observable
         return this.receitasTotais;
     }
     public void remVoid(int pos) throws Exception{
+        Financa deletavel;
+        
+        deletavel = this.array.get(pos);
+        
+        if(deletavel instanceof Receita )
+        {
+            this.saldoTotal-= deletavel.getValue();
+          this.receitasTotais -= deletavel.getValue();
+          
+      }else{
+          if(deletavel.getValue()>0){
+              deletavel.setValue(-deletavel.getValue());
+          }
+          this.saldoTotal -= deletavel.getValue();
+          this.despesasTotais -= deletavel.getValue();
+        }
         this.array.remove(pos);
-        //this.fh.removeFinance(pos);
-       // fh.saveLastMonth(array);
+        this.fh.removeFinance(pos);
+        fh.saveLastMonth(array);
         setChanged();
         notifyObservers();
     }
@@ -92,6 +111,26 @@ public class Contabilidade extends Observable
         return this.array.get(pos);
     }
     public void setFinanca(int pos, Financa nova){
+        Financa editavel;
+        
+        editavel = this.array.get(pos);
+        
+         if(nova instanceof Receita){
+          this.saldoTotal -= editavel.getValue();
+          this.saldoTotal+= nova.getValue();
+          this.receitasTotais += nova.getValue();
+          
+      }else{
+          if(nova.getValue()>0){
+              nova.setValue(-nova .getValue());
+          }
+          this.saldoTotal -= editavel.getValue();
+          this.despesasTotais -= editavel.getValue();
+          this.saldoTotal += nova.getValue();
+          this.despesasTotais += nova.getValue();
+          
+      }
+         
         this.array.set(pos, nova);
         setChanged();
         notifyObservers();
