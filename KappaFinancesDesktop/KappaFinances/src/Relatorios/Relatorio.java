@@ -1,13 +1,8 @@
 package Relatorios;
 
 import Financas.*;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
-import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
-import javafx.application.Application;
 import javafx.scene.chart.Chart;
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,7 +10,6 @@ import javafx.scene.chart.Chart;
  * and open the template in the editor.
  */
 /**
- *
  * @author Winny S
  */
 public abstract class Relatorio /*extends Application*/ implements Observer  {
@@ -31,17 +25,20 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
         this.contas = con;
         this.titulo = title;
         this.contas.addObserver(this);
+        mineracao();
     }
     Relatorio(Contabilidade con){
         this();
         this.contas = con;
         this.contas.addObserver(this);
+         mineracao();
     }
     Relatorio(){
       this.desp = new double[CategoriaDespesa.categorias.values().length];
        for(int i=0;i<desp.length;i++){
           this.desp[i]=0;
       }
+      
     }
     public abstract Chart  geraGrafico();
     /**

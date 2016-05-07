@@ -31,14 +31,10 @@ public class JavaChartDemo {
 class ChartFrame extends JFrame {
    
       Contabilidade x = new Contabilidade();
-      GraficoPizza gb = new GraficoPizza(); //new GraficoBarra();
+      GraficoPizza gb = new GraficoPizza(x); //new GraficoBarra();
     
   JFXPanel fxPanel;
   public ChartFrame(){
-     
-      
-      gb.contas=x;
-    x.addObserver(gb);
     initSwingComponents();
     initFxComponents();
        

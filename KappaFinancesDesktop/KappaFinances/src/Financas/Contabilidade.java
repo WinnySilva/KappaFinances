@@ -32,10 +32,12 @@ public class Contabilidade extends Observable
         this.array = new ArrayList();
         try {
             fh = new FileHandler();
-        } catch (IOException ex) {
+            this.array = fh.loadCurrentMonth();
+        } catch (Exception ex) {
             Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+            this.array = new ArrayList();
+        } 
+    
     }
     
     public Contabilidade(double saldoTotal, double despesasTotais)
