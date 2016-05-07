@@ -18,7 +18,7 @@ import javafx.scene.chart.Chart;
  *
  * @author Winny S
  */
-public abstract class Relatorio extends Application implements Observer  {
+public abstract class Relatorio /*extends Application*/ implements Observer  {
     protected String titulo ="Despesas";
     protected Contabilidade contas;
 //    protected ArrayList<Dado> despesas;
@@ -34,7 +34,6 @@ public abstract class Relatorio extends Application implements Observer  {
     }
     Relatorio(Contabilidade con){
         this();
-        
         this.contas = con;
         this.contas.addObserver(this);
     }
@@ -50,6 +49,7 @@ public abstract class Relatorio extends Application implements Observer  {
      * @return Dado
      */
    protected void mineracao(){
+      
        for(int i=0;i<desp.length;i++){
           this.desp[i]=0;
       }
