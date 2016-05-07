@@ -56,7 +56,6 @@ import javafx.scene.chart.XYChart;
        double dl;
        for(int i=0; i<10; i++){  
            dl = (i+i*0.333);
-         
            d = new Despesa(c,dl, CategoriaDespesa.categorias.values()[i%aux].ordinal());
            x.addFinanca(d);
        }
@@ -89,7 +88,8 @@ import javafx.scene.chart.XYChart;
 
     @Override
     public void update(Observable o, Object arg) {
-        if(pieChartData == null){
+        
+        /*if(pieChartData == null){
             pieChartData=FXCollections.observableArrayList();
             for(int i=0;i<this.desp.length;i++){
             pieChartData.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
@@ -100,7 +100,14 @@ import javafx.scene.chart.XYChart;
         for(int i=0;i<this.desp.length;i++){
             System.out.println("$$$"+desp[i]);
             pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+        }*/
+        mineracao();
+        for(int i=0;i<this.desp.length;i++){
+            this.pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+            //novo_val.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
         }
+        
+
    
         
     }
