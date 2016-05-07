@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package XMLHandler;
 
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -29,6 +24,12 @@ public class DateConverterTo implements Converter {
     private final SimpleDateFormat formatter = new SimpleDateFormat(
             "MMMM dd, yyyy HH:mm:ss");
 
+    /**
+     * Método que recebe a classe na qual a classe DateConverterTo irá
+     * funcionar.
+     *  
+     * @param clazz Classe que será serializada
+     */
     @Override
     public boolean canConvert(Class clazz) 
     {
@@ -37,8 +38,11 @@ public class DateConverterTo implements Converter {
     }
 
     /**
-     * Método para deserealizar o tipo Calendar
+     * Método para serealizar o tipo Calendar
      * 
+     * @param value Objeto da classe Calendar
+     * @param writer Escritor do tipo HieranchicalStreamWriter
+     * @param context Contexto
      */
     @Override
     public void marshal(Object value, HierarchicalStreamWriter writer,
@@ -50,8 +54,11 @@ public class DateConverterTo implements Converter {
     }
     
     /**
-     * Método para deserealizar o tipo Calendar
+     * Método para desserealizar o tipo Calendar
      * 
+     * @param reader Leitor da classe HierarchicalStreamReader
+     * @param context Contexto
+     * @return  Objeto desserealizado
      */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader,
