@@ -4,12 +4,9 @@ import Financas.CategoriaDespesa;
 import Financas.Contabilidade;
 import Financas.Despesa;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleListProperty;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
-import javafx.scene.chart.*;
 import javafx.scene.layout.GridPane;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
@@ -67,6 +64,7 @@ class ChartFrame extends JFrame {
                              //javaFX operations should go here
                              x.addFinanca(d);
                          } catch (Exception ex) {
+                             System.out.println(":::.:::");
                              Logger.getLogger(ChartFrame.class.getName()).log(Level.SEVERE, null, ex);
                          }
                      }

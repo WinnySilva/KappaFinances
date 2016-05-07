@@ -1,23 +1,14 @@
 package Relatorios;
 import Financas.CategoriaDespesa;
 import Financas.Contabilidade;
-import Financas.Despesa;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
 import javafx.stage.Stage;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,10 +23,15 @@ import javafx.scene.chart.XYChart;
     public class GraficoPizza extends Relatorio{
     ObservableList<PieChart.Data> pieChartData;
     
-    
-    
-    
-    @Override
+    GraficoPizza(Contabilidade con,String title){
+        super(con, title);
+    }
+    GraficoPizza(Contabilidade con){
+        super(con);
+    }
+    GraficoPizza(){
+        super();
+    }
     public void  start(Stage stage) { 
         Scene scene = new Scene(new Group());
         stage.setTitle("Test");
@@ -44,25 +40,6 @@ import javafx.scene.chart.XYChart;
         ((Group) scene.getRoot()).getChildren().add(this.geraGrafico());
         stage.setScene(scene);
         stage.show();
-    }
-    public static void main (String args[]) throws Exception{
-      Contabilidade x = new Contabilidade();
-      GraficoPizza gb = new GraficoPizza();
-      gb.contas=x;
-      x.addObserver(gb);
-       Despesa d;
-       int aux =CategoriaDespesa.categorias.values().length;
-       Calendar c = Calendar.getInstance();
-       double dl;
-       for(int i=0; i<10; i++){  
-           dl = (i+i*0.333);
-           d = new Despesa(c,dl, CategoriaDespesa.categorias.values()[i%aux].ordinal());
-           x.addFinanca(d);
-       }
-
-     //  x.addObserver(gb);
-       launch(args);
-       
     }
 
     /**
