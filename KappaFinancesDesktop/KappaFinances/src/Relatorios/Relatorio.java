@@ -1,71 +1,78 @@
 package Relatorios;
 
 import Financas.*;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
-import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
-import javafx.application.Application;
 import javafx.scene.chart.Chart;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
  * @author Winny S
  */
-public abstract class Relatorio extends Application implements Observer  {
+public abstract class Relatorio /*extends Application*/ implements Observer  {
     protected String titulo ="Despesas";
     protected Contabilidade contas;
-//    protected ArrayList<Dado> despesas;
     protected double desp[];
-  //  protected ArrayList<Dado> receitas;
+    protected double rec[];
     protected Chart grafico;
+    protected int tipo;
+    public static  int DESPESA=0;
+    public static  int RECEITA=1;
 
-    Relatorio(Contabilidade con,String title){
+    Relatorio(Contabilidade con,int tipo){
         this();
         this.contas = con;
-        this.titulo = title;
         this.contas.addObserver(this);
+        if(tipo== Relatorio.DESPESA){
+            this.titulo = "Despesas";
+        }else{
+            this.titulo = "Receita";
+        }
+        this.tipo=tipo;
+        mineracao();
     }
     Relatorio(Contabilidade con){
         this();
-        
         this.contas = con;
         this.contas.addObserver(this);
+        mineracao();
     }
     Relatorio(){
-      this.desp = new double[CategoriaDespesa.categorias.values().length];
-       for(int i=0;i<desp.length;i++){
-          this.desp[i]=0;
-      }
+        tipo = 0;  
+        this.desp = new double[CategoriaDespesa.categorias.values().length];
+        this.rec = new double[CategoriaReceita.categorias.values().length];
+        for(int i=0;i<desp.length;i++){
+            this.desp[i]=0;
+        }
+        for(int i=0;i<rec.length;i++){
+            this.rec[i]=0;
+        }
+          System.out.println(desp.length+" "+rec.length);
+    
     }
     public abstract Chart  geraGrafico();
     /**
-     * @param financas
-     * @return Dado
+     * Atualiza os valores totais das categorias
+     * 
      */
    protected void mineracao(){
+      
        for(int i=0;i<desp.length;i++){
           this.desp[i]=0;
       }
-//       this.despesas = new ArrayList();
+        for(int i=0;i<rec.length;i++){
+          this.rec[i]=0;
+      }
        Iterator<Financa> it = this.contas.getFinancas().iterator();  //= financas.iterator();
-       //auxiliares
        Financa aux;
+       
+       // percorre todo vetor de financas, separando os valores por categoria
        while(it.hasNext()){
            aux = it.next();
            if( (aux instanceof Despesa ) ){
                this.desp[aux.getCategoria()] += -aux.getValue();
-               
+           }
+           else {
+               this.rec[aux.getCategoria()] += aux.getValue();
            }
        }
-   }
-    public static void main(String args[]) throws Exception{
-       
    }
 }

@@ -3,23 +3,20 @@ package Relatorios;
 import Financas.CategoriaDespesa;
 import Financas.Contabilidade;
 import Financas.Despesa;
+import Financas.Receita;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleListProperty;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
-import javafx.scene.chart.*;
 import javafx.scene.layout.GridPane;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class JavaChartDemo {
-
   public static void main ( String[] args){
     SwingUtilities.invokeLater(new Runnable() {
       @Override
@@ -33,40 +30,34 @@ public class JavaChartDemo {
 
 class ChartFrame extends JFrame {
    
-      Contabilidade x = new Contabilidade();
-      GraficoPizza gb = new GraficoPizza(); //new GraficoBarra();
+      Contabilidade x ;
+      GraficoBarra gb ; //new GraficoBarra();
     
   JFXPanel fxPanel;
   public ChartFrame(){
-     
-      
-      gb.contas=x;
-    x.addObserver(gb);
-    initSwingComponents();
-    initFxComponents();
-       
+    x = new Contabilidade();
+    gb = new GraficoBarra(x,0);
+      initSwingComponents();
+      initFxComponents();
+       Calendar c = Calendar.getInstance();
     new Thread( new Runnable() {
-
          public void run() {
             // final Despesa d;
-             int aux = CategoriaDespesa.categorias.values().length;
-             Calendar c = Calendar.getInstance();
+             int aux ;
              double dl;
-             Scanner sc = new Scanner(System.in);
-             
-             
-             for(int i=0; i<100; i++){
-                 dl = sc.nextDouble();
-                 aux = sc.nextInt();
-                 final Despesa d = new Despesa(c,dl,aux/*CategoriaDespesa.categorias.values()[i%aux].ordinal()*/);
-                 
-                 Platform.runLater(new Runnable() {
+             Random r = new Random();
+             for(int i=0; i<5; i++){
+                 //dl = sc.nextDouble();
+                 //aux = sc.nextInt();
+                 final Despesa d = new Despesa(c,r.nextDouble()+300,i%2);
+                Platform.runLater(new Runnable() {
                      @Override
                      public void run() {
                          try {
-                             //javaFX operations should go here
                              x.addFinanca(d);
+                             
                          } catch (Exception ex) {
+                             
                              Logger.getLogger(ChartFrame.class.getName()).log(Level.SEVERE, null, ex);
                          }
                      }
@@ -83,7 +74,6 @@ class ChartFrame extends JFrame {
     this.add(mainPanel);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(400,400);
-    
   }
 
   private void initFxComponents(){

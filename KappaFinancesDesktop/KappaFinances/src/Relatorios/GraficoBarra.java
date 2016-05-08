@@ -2,12 +2,10 @@ package Relatorios;
 
 
 import Financas.CategoriaDespesa;
+import Financas.CategoriaReceita;
 import Financas.Contabilidade;
 import Financas.Despesa;
-import Relatorios.Relatorio;
-import java.awt.Graphics2D;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.Observable;
 import static javafx.application.Application.launch;
 import javafx.scene.Scene;
@@ -15,7 +13,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
@@ -27,10 +24,15 @@ public class GraficoBarra extends Relatorio {
     private String labelX = "Categorias", labelY = "Valor(R$)",label = "Valor";
     XYChart.Series series1;
 
-    /*GraficoBarra(Contabilidade x) {
-        super(x);
+    GraficoBarra(Contabilidade con,int tipo){
+        super(con, tipo);
     }
-*/
+    GraficoBarra(Contabilidade con){
+        super(con);
+    }
+    GraficoBarra(){
+        super();
+    }
     @Override
     public Chart geraGrafico() {
         final CategoryAxis xAxis = new CategoryAxis();
@@ -43,14 +45,22 @@ public class GraficoBarra extends Relatorio {
  
         series1 = new XYChart.Series();
         series1.setName(label);       
-        for(int i=0;i<this.desp.length;i++){
-            series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+        if(super.tipo== Relatorio.DESPESA){
+            for(int i=0;i<this.desp.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+            }
+        }else{
+           for(int i=0;i<this.rec.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaReceita.categorias.values()[i]  ,   this.rec[i] ));
+            } 
         }
+        
         bc.getData().addAll(series1);
         return bc;
     }
 
-    @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Bar Chart Sample");
         Scene scene  = new Scene(this.geraGrafico(),800,600);
@@ -58,36 +68,31 @@ public class GraficoBarra extends Relatorio {
         stage.setScene(scene);
         stage.show();
     }
-     public static void main (String args[]) throws Exception{
-      Contabilidade x = new Contabilidade();
-      GraficoBarra gb = new GraficoBarra();
-      gb.contas=x;
-      x.addObserver(gb);
-       Despesa d;
-       int aux =CategoriaDespesa.categorias.values().length;
-       Calendar c = Calendar.getInstance();
-       double dl;
-       for(int i=0; i<10; i++){  
-           dl = (i+i*0.333);
-         
-           d = new Despesa(c,dl, CategoriaDespesa.categorias.values()[i%aux].ordinal());
-           x.addFinanca(d);
-       }
-
-     //  x.addObserver(gb);
-       launch(args);
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         mineracao();
         if(series1==null){
             series1= new XYChart.Series();
         }
-        for(int i=0;i<this.desp.length;i++){
-            System.out.println("::::"+this.desp[i] );
-            series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+        
+        if(super.tipo== Relatorio.DESPESA){
+            for(int i=0;i<this.desp.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+                System.out.println(""+this.desp[i]);
+            }
+        }else{
+           for(int i=0;i<this.rec.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaReceita.categorias.values()[i]  ,   this.rec[i] ));
+            System.out.println(""+this.rec[i]);
+            } 
         }
+        
+        
        
+        
+        
+        
     }
 }

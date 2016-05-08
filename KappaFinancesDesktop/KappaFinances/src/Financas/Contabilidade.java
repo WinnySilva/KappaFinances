@@ -1,7 +1,7 @@
 package Financas;
 import XMLHandler.*;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,18 +24,23 @@ public class Contabilidade extends Observable
     private ArrayList<Financa> array;
     private FileHandler fh;
     
+    
     public Contabilidade()
     {
         saldoTotal = 0;
         despesasTotais = 0;
         receitasTotais = 0;
         this.array = new ArrayList();
+        
         try {
             fh = new FileHandler();
-        } catch (IOException ex) {
+            this.array = fh.loadCurrentMonth();
+            carregarValores();
+        } catch (Exception ex) {
             Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+            this.array = new ArrayList();
+        } 
+    
     }
     
     public Contabilidade(double saldoTotal, double despesasTotais)
@@ -45,12 +50,33 @@ public class Contabilidade extends Observable
         this.despesasTotais = despesasTotais;
         
     }
+    /**
+     * Funcao para pegar da propria classe percorrer e atribuir os valores de saldo, total
+     * de despesa e total de receitas.
+     * OBS: este deve ser a primeira coisa a ser feita, pois assume que o vetor está vazio
+     * @param fin 
+     */
+    private synchronized  void carregarValores(){
+        Iterator<Financa> it= this.array.iterator();
+        Financa aux;
+        while(it.hasNext()){
+            aux = it.next();
+            this.saldoTotal += aux.getValue();
+            if(aux instanceof Receita){
+                this.receitasTotais += aux.getValue();
+            }else{
+                this.despesasTotais +=aux.getValue();
+            }
+            
+        }
+    }
+    
     public double getSaldo()
     {
         return this.saldoTotal;
     }
     
-    public void addFinanca(Financa financa) throws Exception
+    public synchronized  void addFinanca(Financa financa) throws Exception
     {
         double financaValor;
         financaValor = financa.getValue();
@@ -69,19 +95,19 @@ public class Contabilidade extends Observable
       }
       this.array.add(financa);
       this.fh.addFinance(financa);
-      fh.saveLastMonth(array);
       setChanged();
       notifyObservers();
-     
-      
     }
+    
     public double getValorDespesa(){
         return this.despesasTotais;
     }
+    
     public double getValorReceita(){
         return this.receitasTotais;
     }
-    public void remVoid(int pos) throws Exception{
+    
+    public synchronized void remVoid(int pos) throws Exception{
         Financa deletavel;
         
         deletavel = this.array.get(pos);
@@ -91,47 +117,48 @@ public class Contabilidade extends Observable
             this.saldoTotal-= deletavel.getValue();
           this.receitasTotais -= deletavel.getValue();
           
-      }else{
-          if(deletavel.getValue()>0){
-              deletavel.setValue(-deletavel.getValue());
-          }
+        }else{
           this.saldoTotal -= deletavel.getValue();
           this.despesasTotais -= deletavel.getValue();
         }
         this.array.remove(pos);
         this.fh.removeFinance(pos);
-        fh.saveLastMonth(array);
         setChanged();
         notifyObservers();
     }
+    
     public ArrayList<Financa> getFinancas(){
         return this.array;
     }
-    public Financa getFinanca(int pos){
+    
+    public synchronized  Financa getFinanca(int pos){
         return this.array.get(pos);
     }
-    public void setFinanca(int pos, Financa nova){
+    
+    public synchronized  void setFinanca(int pos, Financa nova){
         Financa editavel;
         
         editavel = this.array.get(pos);
         
-         if(nova instanceof Receita){
+        if(nova instanceof Receita){
           this.saldoTotal -= editavel.getValue();
           this.saldoTotal+= nova.getValue();
           this.receitasTotais += nova.getValue();
           
-      }else{
+        }else{
           if(nova.getValue()>0){
               nova.setValue(-nova .getValue());
-          }
+        }
           this.saldoTotal -= editavel.getValue();
           this.despesasTotais -= editavel.getValue();
           this.saldoTotal += nova.getValue();
           this.despesasTotais += nova.getValue();
           
-      }
+        }
          
         this.array.set(pos, nova);
+        this.fh.removeFinance(pos);
+        this.fh.addFinance(nova);
         setChanged();
         notifyObservers();
     }

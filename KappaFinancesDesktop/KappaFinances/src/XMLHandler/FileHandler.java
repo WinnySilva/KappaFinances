@@ -14,9 +14,11 @@ import java.util.Calendar;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
- *
+ * Classe para manipulação do arquivo XML.
+ * 
  * @author Simão Martin
  */
 public class FileHandler {
@@ -26,23 +28,29 @@ public class FileHandler {
     private final File fileXML;
     
     
-    public FileHandler() throws IOException
+    public FileHandler()
     {
         this.filepath = "finances.xml";
         fileXML = new File(this.filepath);
         
         // Verifica se o arquivo XML já existe
         if(!fileXML.exists()){
-            System.out.println("\nNAO EXISTE");
+            System.out.println("\nXML ainda não existe. Criando...");
             
-            // Cria e adiciona a primeira linha ao XML
-            new File("finances.xml").createNewFile();
-            
-            BufferedWriter buffWrite = new BufferedWriter(new FileWriter(this.filepath));
-            Scanner in = new Scanner(System.in);
-            buffWrite.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<list>\n</list>");
-            buffWrite.close();
-            
+            try
+            {
+                // Cria e adiciona a primeira linha ao XML
+                new File("finances.xml").createNewFile();
+
+                BufferedWriter buffWrite = new BufferedWriter(new FileWriter(this.filepath));
+                Scanner in = new Scanner(System.in);
+                buffWrite.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<list>\n</list>");
+                buffWrite.close();
+            }
+            catch(IOException e)
+            {
+                System.err.println("Error in create file");
+            }
             
         }
         
@@ -54,10 +62,8 @@ public class FileHandler {
      * 
      * @param financa   A finança que será adicionada
      * @return Retorna a ArrayList do mês atualizada
-     * @throws org.xml.sax.SAXException
-     * @throws java.io.IOException
      */
-    public ArrayList<Financa> addFinance(Financa financa) throws IOException, Exception
+    public ArrayList<Financa> addFinance(Financa financa)
     {
         //Pega a data atual
         Calendar date = financa.getDate();
@@ -67,7 +73,7 @@ public class FileHandler {
         //Carrega e atualiza o vetor de financas do mês corrente
         ArrayList<Financa> array;
         array = this.loadMonth(month, year);
-        System.out.println("array= " + array);
+//        System.out.println("array= " + array);
         array.add(financa);
         
         //Salva o mês atualizado no XML
@@ -81,9 +87,8 @@ public class FileHandler {
      * 
      * @param i   indice da finança que será removida
      * @return Retorna a ArrayList do mês atualizada
-     * @throws java.io.IOException
      */
-    public ArrayList<Financa> removeFinance(int i) throws IOException, Exception
+    public ArrayList<Financa> removeFinance(int i)
     {
         //Pega a data atual
         Calendar date = Calendar.getInstance();
@@ -132,14 +137,14 @@ public class FileHandler {
         }
         int y = xml.indexOf("</"+month+year+">");
         String financesXML = xml.substring(x+10, y);
-        System.out.println(financesXML);
+       // System.out.println(financesXML);
         ArrayList<Financa> retArray = (ArrayList<Financa>) stream.fromXML(financesXML);
         
         return retArray;
     }
     
     /**
-     * Método auxiliar para carregar o XML
+     * Método auxiliar para carregar o XML em uma String
      * 
      * @return String com o conteúdo do XML
      */
@@ -176,7 +181,7 @@ public class FileHandler {
      * @param m Mês (int)
      * @return Mês em inglês, só as 3 primeiras letras em maiúsculo
      */
-    private String intToMonth(int m) throws Exception
+    private String intToMonth(int m)
     {
         String ret=null;
         if (m==0)
@@ -229,8 +234,15 @@ public class FileHandler {
         }
         else
         {
-            Exception e = new Exception("Month don't exists");
-            throw e;
+            try
+            {
+                Exception e = new Exception("Month don't exists");
+                throw e;
+            }
+            catch (Exception e)
+            {
+                System.err.println(e);
+            }
         }
         return ret;
     }
@@ -240,9 +252,8 @@ public class FileHandler {
      * 
      * 
      * @param finances Vetor de finanças do mês corrente
-     * @throws FileNotFoundException
      */
-    public void saveLastMonth(ArrayList<Financa> finances) throws Exception
+    public void saveLastMonth(ArrayList<Financa> finances)
     {
         // Cria o stream e gera apelidos para as tags do XML
         XStream stream = new XStream(new DomDriver());
@@ -278,24 +289,31 @@ public class FileHandler {
                     "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
             
         }
-        System.out.println(xml+"\n------------------\n");
+    //    System.out.println(xml+"\n------------------\n");
         
-        //Atualiza o arquivo XML
-        FileWriter fw = new FileWriter(fileXML);  
-        BufferedWriter bw = new BufferedWriter(fw);  
-        bw.write(xml);  
-        bw.flush();  
-        bw.close();  
+        try
+        {
+            //Atualiza o arquivo XML
+            FileWriter fw = new FileWriter(fileXML);  
+            BufferedWriter bw = new BufferedWriter(fw);  
+            bw.write(xml);  
+            bw.flush();  
+            bw.close(); 
+        }
+        catch(Exception e)
+        {
+            System.err.println("CAUTION! Error in update XML");
+        }
+        
     }
     
     /**
      * Método para pegar o ArrrayList de Financas do mês corrente
      * 
-     * @return Caso exista ainda o mês corrente no XML: null
+     * @return Caso não exista ainda o mês corrente no XML: arrayListVazio
      *         Caso exista: Array com as Finanças
-     * @throws Exception 
      */
-    public ArrayList<Financa> loadCurrentMonth () throws Exception
+    public ArrayList<Financa> loadCurrentMonth ()
     {
         Calendar date = Calendar.getInstance();
         return this.loadMonth(this.intToMonth(date.get(Calendar.MONTH)),
