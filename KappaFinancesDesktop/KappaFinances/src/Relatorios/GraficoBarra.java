@@ -2,6 +2,7 @@ package Relatorios;
 
 
 import Financas.CategoriaDespesa;
+import Financas.CategoriaReceita;
 import Financas.Contabilidade;
 import Financas.Despesa;
 import java.util.Calendar;
@@ -44,9 +45,18 @@ public class GraficoBarra extends Relatorio {
  
         series1 = new XYChart.Series();
         series1.setName(label);       
-        for(int i=0;i<this.desp.length;i++){
-            series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+        if(super.tipo== Relatorio.DESPESA){
+            for(int i=0;i<this.desp.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+            }
+        }else{
+           for(int i=0;i<this.rec.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaReceita.categorias.values()[i]  ,   this.rec[i] ));
+            } 
         }
+        
         bc.getData().addAll(series1);
         return bc;
     }
@@ -65,16 +75,21 @@ public class GraficoBarra extends Relatorio {
             series1= new XYChart.Series();
         }
         
-        if(true){
-            
+        if(super.tipo== Relatorio.DESPESA){
+            for(int i=0;i<this.desp.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
+                System.out.println(""+this.desp[i]);
+            }
         }else{
-            
+           for(int i=0;i<this.rec.length;i++){
+            series1.getData().add(new XYChart.Data(
+                    ""+CategoriaReceita.categorias.values()[i]  ,   this.rec[i] ));
+            System.out.println(""+this.rec[i]);
+            } 
         }
         
-        for(int i=0;i<this.desp.length;i++){
-            System.out.println("::::"+this.desp[i] );
-            series1.getData().add(new XYChart.Data(""+CategoriaDespesa.categorias.values()[i]  ,   this.desp[i] ));
-        }
+        
        
         
         

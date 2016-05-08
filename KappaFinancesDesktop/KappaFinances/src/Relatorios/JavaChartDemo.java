@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,34 +31,31 @@ public class JavaChartDemo {
 class ChartFrame extends JFrame {
    
       Contabilidade x ;
-      GraficoPizza gb ; //new GraficoBarra();
+      GraficoBarra gb ; //new GraficoBarra();
     
   JFXPanel fxPanel;
   public ChartFrame(){
     x = new Contabilidade();
-    gb = new GraficoPizza(x,1);
+    gb = new GraficoBarra(x,0);
       initSwingComponents();
       initFxComponents();
-       
+       Calendar c = Calendar.getInstance();
     new Thread( new Runnable() {
          public void run() {
             // final Despesa d;
              int aux ;
-             Calendar c = Calendar.getInstance();
              double dl;
-             Scanner sc = new Scanner(System.in);
+             Random r = new Random();
              for(int i=0; i<5; i++){
                  //dl = sc.nextDouble();
                  //aux = sc.nextInt();
-                System.out.println("iteracao:: "+i);
-                 final Receita d = new Receita(c,i,i%2);
+                 final Despesa d = new Despesa(c,r.nextDouble()+300,i%2);
                 Platform.runLater(new Runnable() {
                      @Override
                      public void run() {
                          try {
                              x.addFinanca(d);
-                             System.out.println(x);
-                      //      Thread.sleep(100);
+                             
                          } catch (Exception ex) {
                              
                              Logger.getLogger(ChartFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,7 +65,6 @@ class ChartFrame extends JFrame {
              }}
      }).start();
      //  this.validateTree();
-    System.out.println("FIM DO CONSTRUTOR");
   }
 
   private void initSwingComponents(){
@@ -77,7 +74,6 @@ class ChartFrame extends JFrame {
     this.add(mainPanel);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(400,400);
-    
   }
 
   private void initFxComponents(){
