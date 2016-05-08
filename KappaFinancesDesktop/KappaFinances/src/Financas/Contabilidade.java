@@ -95,18 +95,18 @@ public class Contabilidade extends Observable
       }
       this.array.add(financa);
       this.fh.addFinance(financa);
-      fh.saveLastMonth(array);
       setChanged();
       notifyObservers();
-     
-      
     }
+    
     public double getValorDespesa(){
         return this.despesasTotais;
     }
+    
     public double getValorReceita(){
         return this.receitasTotais;
     }
+    
     public synchronized void remVoid(int pos) throws Exception{
         Financa deletavel;
         
@@ -117,46 +117,48 @@ public class Contabilidade extends Observable
             this.saldoTotal-= deletavel.getValue();
           this.receitasTotais -= deletavel.getValue();
           
-      }else{
+        }else{
           this.saldoTotal -= deletavel.getValue();
           this.despesasTotais -= deletavel.getValue();
         }
         this.array.remove(pos);
         this.fh.removeFinance(pos);
-        fh.saveLastMonth(array);
         setChanged();
         notifyObservers();
     }
+    
     public ArrayList<Financa> getFinancas(){
         return this.array;
     }
+    
     public synchronized  Financa getFinanca(int pos){
         return this.array.get(pos);
     }
+    
     public synchronized  void setFinanca(int pos, Financa nova){
         Financa editavel;
         
         editavel = this.array.get(pos);
         
-         if(nova instanceof Receita){
+        if(nova instanceof Receita){
           this.saldoTotal -= editavel.getValue();
           this.saldoTotal+= nova.getValue();
           this.receitasTotais += nova.getValue();
           
-      }else{
+        }else{
           if(nova.getValue()>0){
               nova.setValue(-nova .getValue());
-          }
+        }
           this.saldoTotal -= editavel.getValue();
           this.despesasTotais -= editavel.getValue();
           this.saldoTotal += nova.getValue();
           this.despesasTotais += nova.getValue();
           
-      }
+        }
          
         this.array.set(pos, nova);
-        fh.removeFinance(pos);
-        fh.addFinance(nova);
+        this.fh.removeFinance(pos);
+        this.fh.addFinance(nova);
         setChanged();
         notifyObservers();
     }

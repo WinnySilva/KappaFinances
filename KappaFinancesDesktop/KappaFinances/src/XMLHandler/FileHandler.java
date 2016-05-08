@@ -15,7 +15,6 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import static javafx.application.Platform.exit;
 
 /**
  * Classe para manipulação do arquivo XML.
@@ -242,8 +241,7 @@ public class FileHandler {
             }
             catch (Exception e)
             {
-                System.out.println(e);
-                exit();
+                System.err.println(e);
             }
         }
         return ret;
