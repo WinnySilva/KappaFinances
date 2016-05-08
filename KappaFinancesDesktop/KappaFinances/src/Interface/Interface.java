@@ -70,10 +70,9 @@ public class Interface extends javax.swing.JFrame {
                     Object[] dados = {CategoriaReceita.categorias.values()[f.getCategoria()], nf.format(f.getValue())};
                     tabela.addRow(dados);
                 }
-                this.ContabilidadeInterface.addFinanca(f);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);
+        /*} catch (IOException ex) {
+            Logger.getLogger(Contabilidade.class.getName()).log(Level.SEVERE, null, ex);*/
         } catch (Exception e) {
             System.out.println("EXCESSAO FATAL DETECTADA");
         }
