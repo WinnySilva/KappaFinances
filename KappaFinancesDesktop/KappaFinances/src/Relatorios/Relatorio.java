@@ -7,7 +7,7 @@ import javafx.scene.chart.Chart;
 /**
  * @author Winny S
  */
-public abstract class Relatorio /*extends Application*/ implements Observer  {
+public abstract class Relatorio  implements Observer  {
     protected String titulo ="Despesas";
     protected Contabilidade contas;
     protected double desp[];
@@ -16,7 +16,14 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
     protected int tipo;
     public static  int DESPESA=0;
     public static  int RECEITA=1;
-
+/**
+ * recebe uma contabilidade para ser observada e 
+ * atualizar as estruturas de dado e um inteiro
+ * para especificar se o relatorio gerado é de despesas
+ * ou receitas
+ * @param con
+ * @param tipo 
+ */
     Relatorio(Contabilidade con,int tipo){
         this();
         this.contas = con;
@@ -29,13 +36,21 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
         this.tipo=tipo;
         mineracao();
     }
+    /**
+     * recebe uma contabilidade para ser observada
+     * e gera relatorio para despesas como padrão
+     * @param con 
+     */
     Relatorio(Contabilidade con){
         this();
         this.contas = con;
         this.contas.addObserver(this);
         mineracao();
     }
-    Relatorio(){
+    /**
+     * construtor interno ao pacote
+     */
+    protected Relatorio(){
         tipo = 0;  
         this.desp = new double[CategoriaDespesa.categorias.values().length];
         this.rec = new double[CategoriaReceita.categorias.values().length];

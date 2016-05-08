@@ -6,17 +6,8 @@ import java.util.Observable;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
-import javafx.stage.Stage;
 import javafx.scene.chart.PieChart;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
@@ -57,8 +48,7 @@ import javafx.scene.chart.PieChart;
                 this.pieChartData.add( new PieChart.Data(
                         ""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
             }
-        }
-       
+        }       
         PieChart chart = new PieChart(pieChartData); 
         chart.setTitle(super.titulo);
         this.grafico = chart;
@@ -68,8 +58,6 @@ import javafx.scene.chart.PieChart;
     @Override
     public void update(Observable o, Object arg) {
         mineracao();
-        
-        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
