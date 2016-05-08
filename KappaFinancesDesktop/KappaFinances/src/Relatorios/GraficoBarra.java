@@ -6,20 +6,17 @@ import Financas.CategoriaReceita;
 import Financas.Contabilidade;
 import java.util.Observable;
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.stage.Stage;
-
 /**
  *
  * @author Winny S
  */
 public class GraficoBarra extends Relatorio {
-    private final String  labelX  = "Categorias", labelY = "Valor(R$)",label = "Valor";
+    private final String  labelX  = "Categorias", labelY = "Valor(R$)";
     XYChart.Series series1;
 
     public GraficoBarra(Contabilidade con,int tipo){

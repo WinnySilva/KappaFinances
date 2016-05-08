@@ -37,14 +37,12 @@ import javafx.scene.chart.PieChart;
        pieChartData=FXCollections.observableArrayList();
         if(super.tipo== Relatorio.DESPESA){
             for(int i=0;i<this.desp.length;i++){
-                System.out.println("%%:"+CategoriaDespesa.categorias.values()[i]+"::"+this.desp[i]);
                 this.pieChartData.add(new PieChart.Data(
                     ""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
             
            }
         }else{
             for(int i=0;i<this.rec.length;i++){
-                System.out.println("%%"+CategoriaReceita.categorias.values()[i]+"::"+this.rec[i]);
                 this.pieChartData.add( new PieChart.Data(
                         ""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
             }

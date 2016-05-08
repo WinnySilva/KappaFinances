@@ -9,26 +9,19 @@ import javax.swing.table.DefaultTableModel;
 import Financas.*;
 import Relatorios.GraficoBarra;
 import Relatorios.GraficoPizza;
-import Relatorios.JavaChartDemo;
 import Relatorios.Relatorio;
 import XMLHandler.*;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -38,14 +31,18 @@ public class Interface extends javax.swing.JFrame {
     private Contabilidade ContabilidadeInterface = new Contabilidade();
 
     //variaveis para mostrar os graficos na na GUI
-    private JFXPanel jxfPanelGB;
-    private JFXPanel jxfPanelGP;
-    private int tipoGrafico = Relatorio.DESPESA; /* variavel para definir o tipo 
-    dos graficos, se tipo = Relatorio.DESPESA for passado para o construtor do grafico
-    ele ira mostrar um gráfico de todas as despesas*/
-    private GraficoBarra gb = new GraficoBarra(ContabilidadeInterface,tipoGrafico);
-    private GraficoPizza gp = new GraficoPizza(ContabilidadeInterface,tipoGrafico);
-
+    private JFXPanel jxfPanelGB_despesa;
+    private JFXPanel jxfPanelGP_despesa;
+    private GraficoBarra gb_despesa = new GraficoBarra(ContabilidadeInterface,Relatorio.DESPESA);
+    private GraficoPizza gp_despesa = new GraficoPizza(ContabilidadeInterface,Relatorio.DESPESA);
+    
+    private JFXPanel jxfPanelGB_receita;
+    private JFXPanel jxfPanelGP_receita;
+    private GraficoBarra gb_receita = new GraficoBarra(ContabilidadeInterface,Relatorio.RECEITA);
+    private GraficoPizza gp_receita = new GraficoPizza(ContabilidadeInterface,Relatorio.RECEITA);
+    
+    //----------
+    
     /**
      * Os proximos dois atributos sao utilizados pela lista txtListaFinancas para
      * que a insercao das categorias possiveis sejam automatica.
@@ -65,8 +62,11 @@ public class Interface extends javax.swing.JFrame {
         initComponents();
         
         //insere os graficos na GUI
-        jxfPanelGB = new JFXPanel();
-        jxfPanelGP = new JFXPanel();
+        jxfPanelGB_despesa = new JFXPanel();
+        jxfPanelGP_despesa = new JFXPanel();
+        jxfPanelGB_receita = new JFXPanel();
+        jxfPanelGP_receita = new JFXPanel();
+       
         initFxComponents();
         carregarGraficos();        
         //--
@@ -104,6 +104,7 @@ public class Interface extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("EXCESSAO FATAL DETECTADA");
         }
+        this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
     }
 
     
@@ -114,16 +115,31 @@ public class Interface extends javax.swing.JFrame {
         // isso funciona
         JPanel graficoPanel;
         graficoPanel = new JPanel(new BorderLayout() );
-        graficoPanel.add(jxfPanelGB, BorderLayout.CENTER) ;
-        graficoPanel.setSize( jPanelGB.getWidth() , jPanelGB.getHeight());
-        jPanelGB.add(graficoPanel);
-        jPanel2.updateUI();
+        graficoPanel.add(jxfPanelGB_despesa, BorderLayout.CENTER) ;
+        graficoPanel.setSize( jPanelGB_despesa.getWidth() , jPanelGB_despesa.getHeight());
+        jPanelGB_despesa.add(graficoPanel);
+        jPanelGB_despesa.updateUI();
         
         graficoPanel = new JPanel(new BorderLayout() );
-        graficoPanel.add(jxfPanelGP, BorderLayout.CENTER) ;
-        graficoPanel.setSize( jPanelGP.getWidth() , jPanelGP.getHeight());
-        jPanelGP.add(graficoPanel);
-        jPanel2.updateUI();
+        graficoPanel.add(jxfPanelGP_despesa, BorderLayout.CENTER) ;
+        graficoPanel.setSize( jPanelGP_despesa.getWidth() , jPanelGP_despesa.getHeight());
+        jPanelGP_despesa.add(graficoPanel);
+        jPanelGP_despesa.updateUI();
+        
+        
+        graficoPanel = new JPanel(new BorderLayout() );
+        graficoPanel.add(jxfPanelGP_receita, BorderLayout.CENTER) ;
+        graficoPanel.setSize( jPanelGP_receita1.getWidth() , jPanelGP_receita1.getHeight());
+        jPanelGP_receita1.add(graficoPanel);
+        jPanelGP_receita1.updateUI();
+        
+        
+        graficoPanel = new JPanel(new BorderLayout() );
+        graficoPanel.add(jxfPanelGB_receita, BorderLayout.CENTER) ;
+        graficoPanel.setSize( jPanelGB_receita.getWidth() , jPanelGB_receita.getHeight());
+        jPanelGB_receita.add(graficoPanel);
+        jPanelGB_receita.updateUI();
+        
         
         
     }
@@ -169,21 +185,19 @@ public class Interface extends javax.swing.JFrame {
         breceita = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
         txtListaFinancas = new javax.swing.JComboBox<String>();
         submit = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         txtValor = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<String>();
-        jComboBox2 = new javax.swing.JComboBox<String>();
-        jButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         tablegraficos = new javax.swing.JTabbedPane();
-        jPanelGB = new javax.swing.JPanel();
-        jPanelGP = new javax.swing.JPanel();
+        jPanelGP_despesa = new javax.swing.JPanel();
+        jPanelGB_despesa = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanelGP_receita = new javax.swing.JTabbedPane();
+        jPanelGB_receita = new javax.swing.JPanel();
+        jPanelGP_receita1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kappa Finances");
@@ -230,7 +244,7 @@ public class Interface extends javax.swing.JFrame {
                 .addComponent(jLabel18)
                 .addGap(18, 18, 18)
                 .addComponent(txtfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,7 +270,7 @@ public class Interface extends javax.swing.JFrame {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(1, 1, 1)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -265,7 +279,7 @@ public class Interface extends javax.swing.JFrame {
                         .addComponent(editar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deletar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(2, 2, 2))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,9 +318,6 @@ public class Interface extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jLabel7.setText("R$");
 
-        jLabel8.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel8.setText("Obs:");
-
         txtListaFinancas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -320,8 +331,6 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Data Atual");
-
         txtValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         txtValor.setInheritsPopupMenu(true);
         txtValor.addActionListener(new java.awt.event.ActionListener() {
@@ -334,37 +343,29 @@ public class Interface extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(submit)
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addGap(23, 23, 23))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(71, 71, 71)
+                .addComponent(bdespesa)
+                .addGap(18, 18, 18)
+                .addComponent(breceita)
+                .addContainerGap(119, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(bdespesa)
-                        .addGap(18, 18, 18)
-                        .addComponent(breceita))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
-                        .addComponent(txtListaFinancas, 0, 272, Short.MAX_VALUE))
+                        .addComponent(txtListaFinancas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField4)
-                            .addComponent(txtValor))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtValor))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(submit)))
+                .addContainerGap())
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel6, jLabel7, jLabel8});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel6, jLabel7});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,109 +378,103 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtListaFinancas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(57, 57, 57)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addGap(35, 35, 35)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(submit)
-                    .addComponent(jButton4))
-                .addGap(26, 26, 26))
+                .addGap(37, 37, 37)
+                .addComponent(submit)
+                .addGap(125, 125, 125))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel6, jLabel7, jLabel8});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel6, jLabel7});
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/kappa.jpg"))); // NOI18N
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Relatórios"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        tablegraficos.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jButton1.setText("Visualizar");
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Gráficos"));
-
-        javax.swing.GroupLayout jPanelGBLayout = new javax.swing.GroupLayout(jPanelGB);
-        jPanelGB.setLayout(jPanelGBLayout);
-        jPanelGBLayout.setHorizontalGroup(
-            jPanelGBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 391, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanelGP_despesaLayout = new javax.swing.GroupLayout(jPanelGP_despesa);
+        jPanelGP_despesa.setLayout(jPanelGP_despesaLayout);
+        jPanelGP_despesaLayout.setHorizontalGroup(
+            jPanelGP_despesaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 376, Short.MAX_VALUE)
         );
-        jPanelGBLayout.setVerticalGroup(
-            jPanelGBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 402, Short.MAX_VALUE)
+        jPanelGP_despesaLayout.setVerticalGroup(
+            jPanelGP_despesaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
-        tablegraficos.addTab("tab1", jPanelGB);
+        tablegraficos.addTab("Gráfico Pizza", jPanelGP_despesa);
 
-        javax.swing.GroupLayout jPanelGPLayout = new javax.swing.GroupLayout(jPanelGP);
-        jPanelGP.setLayout(jPanelGPLayout);
-        jPanelGPLayout.setHorizontalGroup(
-            jPanelGPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 391, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanelGB_despesaLayout = new javax.swing.GroupLayout(jPanelGB_despesa);
+        jPanelGB_despesa.setLayout(jPanelGB_despesaLayout);
+        jPanelGB_despesaLayout.setHorizontalGroup(
+            jPanelGB_despesaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 376, Short.MAX_VALUE)
         );
-        jPanelGPLayout.setVerticalGroup(
-            jPanelGPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 402, Short.MAX_VALUE)
+        jPanelGB_despesaLayout.setVerticalGroup(
+            jPanelGB_despesaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
-        tablegraficos.addTab("tab2", jPanelGP);
+        tablegraficos.addTab("Gráfico Barras", jPanelGB_despesa);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(tablegraficos)
-                    .addContainerGap()))
+        jTabbedPane1.addTab("Despesas", tablegraficos);
+
+        jPanelGP_receita.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        jPanelGP_receita.setToolTipText("");
+
+        javax.swing.GroupLayout jPanelGB_receitaLayout = new javax.swing.GroupLayout(jPanelGB_receita);
+        jPanelGB_receita.setLayout(jPanelGB_receitaLayout);
+        jPanelGB_receitaLayout.setHorizontalGroup(
+            jPanelGB_receitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 376, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                    .addContainerGap(19, Short.MAX_VALUE)
-                    .addComponent(tablegraficos, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+        jPanelGB_receitaLayout.setVerticalGroup(
+            jPanelGB_receitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
+
+        jPanelGP_receita.addTab("Gráfico Barras", jPanelGB_receita);
+
+        javax.swing.GroupLayout jPanelGP_receita1Layout = new javax.swing.GroupLayout(jPanelGP_receita1);
+        jPanelGP_receita1.setLayout(jPanelGP_receita1Layout);
+        jPanelGP_receita1Layout.setHorizontalGroup(
+            jPanelGP_receita1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 376, Short.MAX_VALUE)
+        );
+        jPanelGP_receita1Layout.setVerticalGroup(
+            jPanelGP_receita1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
+        );
+
+        jPanelGP_receita.addTab("Gráfico Pizza", jPanelGP_receita1);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelGP_receita)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelGP_receita)
+        );
+
+        jTabbedPane1.addTab("Receitas", jPanel5);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(34, 34, 34))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -488,14 +483,11 @@ public class Interface extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel5)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -534,32 +526,39 @@ public class Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-       
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
+        
+        if((this.txtValor.getText().isEmpty()) /*||(!this.txtValor.getText().matches("([0-9])*")  )*/)   {
+            JOptionPane.showMessageDialog(null, "Insira um valor válido.");
+            return;
+        }
+        
+        
+        
+        
         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
         NumberFormat nf = NumberFormat.getCurrencyInstance();
-        Object[] dados = {this.txtListaFinancas.getSelectedItem(), nf.format(Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")))};
+        Object[] dados = {
+            this.txtListaFinancas.getSelectedItem(),
+            nf.format(Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")))};
         if (!this.txtValor.getText().isEmpty()) {
             // Insere a financa na tabela interface grafica
             tabela.addRow(dados);
-            
+
             // Insere a financa no XML
             Financa tempFinanca;
             if (this.bdespesa.isSelected()) {
                 Despesa tempDespesa = new Despesa(Calendar.getInstance(),
                     Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
                     CategoriaDespesa.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
-                    tempFinanca = tempDespesa;
+                tempFinanca = tempDespesa;
             }else {
                 Receita tempReceita = new Receita(Calendar.getInstance(),
                     Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
                     CategoriaReceita.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
-                    tempFinanca = tempReceita;
+                tempFinanca = tempReceita;
             }
-            
+
             try {
                 this.ContabilidadeInterface.addFinanca(tempFinanca);
                 // Atualiza o saldo na Interface
@@ -568,22 +567,58 @@ public class Interface extends javax.swing.JFrame {
             catch (Exception e){
                 System.out.println("EXCESSAO FATAL DETECTADA");
             }
-                        
+
         }else{
             JOptionPane.showMessageDialog(null, "Insira um valor.");
-            }
+        }
     }//GEN-LAST:event_submitActionPerformed
 
-    private void bdespesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdespesaActionPerformed
-        this.txtListaFinancas.setModel(this.cbModelDespesa);
-    }//GEN-LAST:event_bdespesaActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void breceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breceitaActionPerformed
         this.txtListaFinancas.setModel(this.cbModelReceita);
     }//GEN-LAST:event_breceitaActionPerformed
 
+    private void bdespesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdespesaActionPerformed
+        this.txtListaFinancas.setModel(this.cbModelDespesa);
+    }//GEN-LAST:event_bdespesaActionPerformed
+
+    private void jPanel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseClicked
+
+        DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
+
+        if (this.jtabela.getSelectedRow() != -1) {
+            // Modifica financa no XML
+            Financa tempFinanca;
+            if (this.bdespesa.isSelected()) {
+                Despesa tempDespesa = new Despesa(Calendar.getInstance(),
+                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
+                    CategoriaDespesa.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
+                tempFinanca = tempDespesa;
+            }else {
+                Receita tempReceita = new Receita(Calendar.getInstance(),
+                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
+                    CategoriaReceita.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
+                tempFinanca = tempReceita;
+            }
+            this.ContabilidadeInterface.setFinanca(this.jtabela.getSelectedRow(), tempFinanca);
+
+            // Modifica financa na tabela da interface
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
+            tabela.setValueAt(this.txtListaFinancas.getSelectedItem(), jtabela.getSelectedRow(), 0);
+            tabela.setValueAt(nf.format(Double.parseDouble(this.txtValor.getText().replaceAll(",", "."))), jtabela.getSelectedRow(), 1);
+
+            // Atualiza o saldo na Interface
+            this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha para editar.");
+        }
+    }//GEN-LAST:event_jPanel8MouseClicked
+
     private void deletarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletarMouseClicked
-        
+
         if (this.jtabela.getSelectedRow() != -1) {
             // Remove financa do XML
             try {
@@ -594,47 +629,14 @@ public class Interface extends javax.swing.JFrame {
             catch (Exception e) {
                 System.out.println("Excessao fatal reportada durante tentaiva de remocao de uma financa.");
             }
-            
+
             // Remove financa da tabela da interface
             DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
             tabela.removeRow(jtabela.getSelectedRow());
         }else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha para deletar.");
         }
-        
     }//GEN-LAST:event_deletarMouseClicked
-
-    private void jPanel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseClicked
-        
-         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
-         
-        if (this.jtabela.getSelectedRow() != -1) {
-            // Modifica financa no XML
-            Financa tempFinanca;
-            if (this.bdespesa.isSelected()) {
-                Despesa tempDespesa = new Despesa(Calendar.getInstance(),
-                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
-                    CategoriaDespesa.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
-                    tempFinanca = tempDespesa;
-            }else {
-                Receita tempReceita = new Receita(Calendar.getInstance(),
-                    Double.parseDouble(this.txtValor.getText().replaceAll(",", ".")),
-                    CategoriaReceita.categorias.valueOf(this.txtListaFinancas.getSelectedItem().toString()).ordinal());
-                    tempFinanca = tempReceita;
-            }
-            this.ContabilidadeInterface.setFinanca(this.jtabela.getSelectedRow(), tempFinanca);
-            
-            // Modifica financa na tabela da interface
-            NumberFormat nf = NumberFormat.getCurrencyInstance();
-            tabela.setValueAt(this.txtListaFinancas.getSelectedItem(), jtabela.getSelectedRow(), 0);
-            tabela.setValueAt(nf.format(Double.parseDouble(this.txtValor.getText().replaceAll(",", "."))), jtabela.getSelectedRow(), 1);
-            
-            // Atualiza o saldo na Interface
-            this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
-         } else {
-            JOptionPane.showMessageDialog(null, "Selecione uma linha para editar.");
-         }
-    }//GEN-LAST:event_jPanel8MouseClicked
 
     /**
      * @param args the command line arguments
@@ -676,17 +678,30 @@ public class Interface extends javax.swing.JFrame {
     Platform.runLater(new Runnable() {
       @Override
       public void run() {
-          //gera o grafico de barras e coloca no jxfpanel
+          //gera o grafico de barras de despesas e coloca no jxfpanel
           GridPane grid = new GridPane();
           Scene scene = new Scene(grid, 400, 400);
-          grid.add(gb.geraGrafico(), 0, 0);
-          jxfPanelGB.setScene(scene);  
+          grid.add(gb_despesa.geraGrafico(), 0, 0);
+          jxfPanelGB_despesa.setScene(scene);  
           
-          //gera o grafico de pizza e coloca no jxfpanel
+          //gera o grafico de barra de receitas e coloca no jxfpanel
           grid = new GridPane();
           scene = new Scene(grid, 400, 400);
-          grid.add(gp.geraGrafico(), 0, 0);
-          jxfPanelGP.setScene(scene); 
+          grid.add(gb_receita.geraGrafico(), 0, 0);
+          jxfPanelGB_receita.setScene(scene);
+          
+          //gera o grafico de pizza de despesas e coloca no jxfpanel
+          grid = new GridPane();
+          scene = new Scene(grid, 400, 400);
+          grid.add(gp_despesa.geraGrafico(), 0, 0);
+          jxfPanelGP_despesa.setScene(scene);          
+          
+          //gera o grafico de pizza de receitas e coloca no jxfpanel
+          grid = new GridPane();
+          scene = new Scene(grid, 400, 400);
+          grid.add(gp_receita.geraGrafico(), 0, 0);
+          jxfPanelGP_receita.setScene(scene);
+          
       }
       });
 
@@ -700,25 +715,23 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGrpTipoFinanca;
     private javax.swing.JLabel deletar;
     private javax.swing.JLabel editar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JPanel jPanelGB;
-    private javax.swing.JPanel jPanelGP;
+    private javax.swing.JPanel jPanelGB_despesa;
+    private javax.swing.JPanel jPanelGB_receita;
+    private javax.swing.JPanel jPanelGP_despesa;
+    private javax.swing.JTabbedPane jPanelGP_receita;
+    private javax.swing.JPanel jPanelGP_receita1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jtabela;
     private javax.swing.JButton submit;
     private javax.swing.JTabbedPane tablegraficos;
