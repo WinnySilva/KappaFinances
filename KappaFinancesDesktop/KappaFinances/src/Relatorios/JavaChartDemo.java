@@ -31,14 +31,15 @@ public class JavaChartDemo {
 class ChartFrame extends JFrame {
    
       Contabilidade x ;
-      GraficoBarra gb ; //new GraficoBarra();
+      GraficoPizza gb ; //new GraficoBarra();
     
   JFXPanel fxPanel;
   public ChartFrame(){
     x = new Contabilidade();
-    gb = new GraficoBarra(x,0);
+    gb = new GraficoPizza(x,0);
       initSwingComponents();
       initFxComponents();
+      
        Calendar c = Calendar.getInstance();
     new Thread( new Runnable() {
          public void run() {
@@ -70,10 +71,12 @@ class ChartFrame extends JFrame {
   private void initSwingComponents(){
     JPanel mainPanel = new JPanel(new BorderLayout());
     fxPanel = new JFXPanel();
-    mainPanel.add(fxPanel, BorderLayout.CENTER);
+    
     this.add(mainPanel);
+    
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(400,400);
+    mainPanel.add(fxPanel, BorderLayout.CENTER);
   }
 
   private void initFxComponents(){

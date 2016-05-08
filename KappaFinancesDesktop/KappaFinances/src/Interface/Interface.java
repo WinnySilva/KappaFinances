@@ -7,15 +7,28 @@ package Interface;
 
 import javax.swing.table.DefaultTableModel;
 import Financas.*;
+import Relatorios.GraficoBarra;
+import Relatorios.GraficoPizza;
+import Relatorios.JavaChartDemo;
+import Relatorios.Relatorio;
 import XMLHandler.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -23,6 +36,16 @@ import javax.swing.JOptionPane;
  */
 public class Interface extends javax.swing.JFrame {
     private Contabilidade ContabilidadeInterface = new Contabilidade();
+
+    //variaveis para mostrar os graficos na na GUI
+    private JFXPanel jxfPanelGB;
+    private JFXPanel jxfPanelGP;
+    private int tipoGrafico = Relatorio.DESPESA; /* variavel para definir o tipo 
+    dos graficos, se tipo = Relatorio.DESPESA for passado para o construtor do grafico
+    ele ira mostrar um gráfico de todas as despesas*/
+    private GraficoBarra gb = new GraficoBarra(ContabilidadeInterface,tipoGrafico);
+    private GraficoPizza gp = new GraficoPizza(ContabilidadeInterface,tipoGrafico);
+
     /**
      * Os proximos dois atributos sao utilizados pela lista txtListaFinancas para
      * que a insercao das categorias possiveis sejam automatica.
@@ -33,15 +56,20 @@ public class Interface extends javax.swing.JFrame {
      */
     private DefaultComboBoxModel cbModelReceita = new DefaultComboBoxModel(CategoriaReceita.categorias.values());
     private DefaultComboBoxModel cbModelDespesa = new DefaultComboBoxModel(CategoriaDespesa.categorias.values());
-    
- 
-            
+               
 
     /**
      * Creates new form Interface
      */
     public Interface() {
         initComponents();
+        
+        //insere os graficos na GUI
+        jxfPanelGB = new JFXPanel();
+        jxfPanelGP = new JFXPanel();
+        initFxComponents();
+        carregarGraficos();        
+        //--
         
         // Inicializa o grupo de botoes
         this.btnGrpTipoFinanca.add(this.bdespesa);
@@ -78,6 +106,28 @@ public class Interface extends javax.swing.JFrame {
         }
     }
 
+    
+    /**
+     * 
+     */
+    private void carregarGraficos(){
+        // isso funciona
+        JPanel graficoPanel;
+        graficoPanel = new JPanel(new BorderLayout() );
+        graficoPanel.add(jxfPanelGB, BorderLayout.CENTER) ;
+        graficoPanel.setSize( jPanelGB.getWidth() , jPanelGB.getHeight());
+        jPanelGB.add(graficoPanel);
+        jPanel2.updateUI();
+        
+        graficoPanel = new JPanel(new BorderLayout() );
+        graficoPanel.add(jxfPanelGP, BorderLayout.CENTER) ;
+        graficoPanel.setSize( jPanelGP.getWidth() , jPanelGP.getHeight());
+        jPanelGP.add(graficoPanel);
+        jPanel2.updateUI();
+        
+        
+    }
+    
     private String intToMonth(int m)
     {
         String ret=null;
@@ -131,6 +181,9 @@ public class Interface extends javax.swing.JFrame {
         jComboBox2 = new javax.swing.JComboBox<String>();
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        tablegraficos = new javax.swing.JTabbedPane();
+        jPanelGB = new javax.swing.JPanel();
+        jPanelGP = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kappa Finances");
@@ -163,7 +216,6 @@ public class Interface extends javax.swing.JFrame {
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Saldo"));
 
         jLabel18.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setText("Saldo");
 
         txtfSaldo.setEditable(false);
@@ -247,18 +299,14 @@ public class Interface extends javax.swing.JFrame {
         });
 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Lista");
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("R$");
 
         jLabel8.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Obs:");
 
-        txtListaFinancas.setForeground(new java.awt.Color(0, 0, 0));
         txtListaFinancas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -358,15 +406,51 @@ public class Interface extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Gráficos"));
 
+        javax.swing.GroupLayout jPanelGBLayout = new javax.swing.GroupLayout(jPanelGB);
+        jPanelGB.setLayout(jPanelGBLayout);
+        jPanelGBLayout.setHorizontalGroup(
+            jPanelGBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 391, Short.MAX_VALUE)
+        );
+        jPanelGBLayout.setVerticalGroup(
+            jPanelGBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 402, Short.MAX_VALUE)
+        );
+
+        tablegraficos.addTab("tab1", jPanelGB);
+
+        javax.swing.GroupLayout jPanelGPLayout = new javax.swing.GroupLayout(jPanelGP);
+        jPanelGP.setLayout(jPanelGPLayout);
+        jPanelGPLayout.setHorizontalGroup(
+            jPanelGPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 391, Short.MAX_VALUE)
+        );
+        jPanelGPLayout.setVerticalGroup(
+            jPanelGPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 402, Short.MAX_VALUE)
+        );
+
+        tablegraficos.addTab("tab2", jPanelGP);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 416, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(tablegraficos)
+                    .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 460, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addContainerGap(19, Short.MAX_VALUE)
+                    .addComponent(tablegraficos, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -586,7 +670,30 @@ public class Interface extends javax.swing.JFrame {
             }
         });
     }
+    //funcao de geracao do grafico e adição aos panels correspondentes
+    private void initFxComponents(){
+    
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+          //gera o grafico de barras e coloca no jxfpanel
+          GridPane grid = new GridPane();
+          Scene scene = new Scene(grid, 400, 400);
+          grid.add(gb.geraGrafico(), 0, 0);
+          jxfPanelGB.setScene(scene);  
+          
+          //gera o grafico de pizza e coloca no jxfpanel
+          grid = new GridPane();
+          scene = new Scene(grid, 400, 400);
+          grid.add(gp.geraGrafico(), 0, 0);
+          jxfPanelGP.setScene(scene); 
+      }
+      });
 
+  }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton bdespesa;
     private javax.swing.JRadioButton breceita;
@@ -608,10 +715,13 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelGB;
+    private javax.swing.JPanel jPanelGP;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTable jtabela;
     private javax.swing.JButton submit;
+    private javax.swing.JTabbedPane tablegraficos;
     private javax.swing.JComboBox<String> txtListaFinancas;
     private javax.swing.JFormattedTextField txtValor;
     private javax.swing.JFormattedTextField txtfSaldo;

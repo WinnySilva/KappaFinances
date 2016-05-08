@@ -3,6 +3,7 @@ import Financas.CategoriaDespesa;
 import Financas.CategoriaReceita;
 import Financas.Contabilidade;
 import java.util.Observable;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -24,26 +25,16 @@ import javafx.scene.chart.PieChart;
     public class GraficoPizza extends Relatorio{
     ObservableList<PieChart.Data> pieChartData;
     
-    GraficoPizza(Contabilidade con,int tipo){
+    public GraficoPizza(Contabilidade con,int tipo){
         super(con, tipo);
     }
     
-    GraficoPizza(Contabilidade con){
+    public GraficoPizza(Contabilidade con){
         super(con);
     }
-    GraficoPizza(){
+    public GraficoPizza(){
         super();
     }
-    public void  start(Stage stage) { 
-        Scene scene = new Scene(new Group());
-        stage.setTitle("Test");
-        stage.setWidth(500);
-        stage.setHeight(500);
-        ((Group) scene.getRoot()).getChildren().add(this.geraGrafico());
-        stage.setScene(scene);
-        stage.show();
-    }
-
     /**
      *um grafico de pizza do tipo Chart, ele deve ser inserido na gui atraves de um
      * FXPanel ou Fx conteneiner
@@ -53,10 +44,6 @@ import javafx.scene.chart.PieChart;
     @Override
     public Chart geraGrafico() {
        pieChartData=FXCollections.observableArrayList();
-        
-       /* for(int i=0;i<this.desp.length;i++){
-            pieChartData.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
-        }*/
         if(super.tipo== Relatorio.DESPESA){
             for(int i=0;i<this.desp.length;i++){
                 System.out.println("%%:"+CategoriaDespesa.categorias.values()[i]+"::"+this.desp[i]);
@@ -82,16 +69,22 @@ import javafx.scene.chart.PieChart;
     public void update(Observable o, Object arg) {
         mineracao();
         
-        if(super.tipo== Relatorio.DESPESA){
-            for(int i=0;i<this.desp.length;i++){
-            this.pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
-           }
-        }else{
-            for(int i=0;i<this.rec.length;i++){
-            this.pieChartData.set(i, new PieChart.Data(""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if(tipo== Relatorio.DESPESA){
+                    for(int i=0;i<desp.length;i++){
+                    pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,desp[i]));
+                   }
+                }else{
+                    for(int i=0;i<rec.length;i++){
+                    pieChartData.set(i, new PieChart.Data(""+CategoriaReceita.categorias.values()[i] ,rec[i]));
+                    }
+                }
             }
-        }
-            
+        });
+        
             
         
         

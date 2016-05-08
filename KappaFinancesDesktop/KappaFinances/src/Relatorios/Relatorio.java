@@ -45,8 +45,6 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
         for(int i=0;i<rec.length;i++){
             this.rec[i]=0;
         }
-          System.out.println(desp.length+" "+rec.length);
-    
     }
     public abstract Chart  geraGrafico();
     /**
