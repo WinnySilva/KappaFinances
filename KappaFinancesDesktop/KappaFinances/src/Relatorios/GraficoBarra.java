@@ -58,26 +58,6 @@ public class GraficoBarra extends Relatorio {
         stage.setScene(scene);
         stage.show();
     }
-     public static void main (String args[]) throws Exception{
-      Contabilidade x = new Contabilidade();
-      GraficoBarra gb = new GraficoBarra();
-      gb.contas=x;
-      x.addObserver(gb);
-       Despesa d;
-       int aux =CategoriaDespesa.categorias.values().length;
-       Calendar c = Calendar.getInstance();
-       double dl;
-       for(int i=0; i<10; i++){  
-           dl = (i+i*0.333);
-         
-           d = new Despesa(c,dl, CategoriaDespesa.categorias.values()[i%aux].ordinal());
-           x.addFinanca(d);
-       }
-
-     //  x.addObserver(gb);
-       launch(args);
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         mineracao();

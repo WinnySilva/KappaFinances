@@ -73,7 +73,7 @@ public class FileHandler {
         //Carrega e atualiza o vetor de financas do mês corrente
         ArrayList<Financa> array;
         array = this.loadMonth(month, year);
-        System.out.println("array= " + array);
+//        System.out.println("array= " + array);
         array.add(financa);
         
         //Salva o mês atualizado no XML
@@ -137,7 +137,7 @@ public class FileHandler {
         }
         int y = xml.indexOf("</"+month+year+">");
         String financesXML = xml.substring(x+10, y);
-        System.out.println(financesXML);
+       // System.out.println(financesXML);
         ArrayList<Financa> retArray = (ArrayList<Financa>) stream.fromXML(financesXML);
         
         return retArray;
@@ -289,7 +289,7 @@ public class FileHandler {
                     "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
             
         }
-        System.out.println(xml+"\n------------------\n");
+    //    System.out.println(xml+"\n------------------\n");
         
         try
         {

@@ -57,13 +57,18 @@ import javafx.scene.chart.PieChart;
        /* for(int i=0;i<this.desp.length;i++){
             pieChartData.add(new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
         }*/
-        if(this.tipo== Relatorio.DESPESA){
+        if(super.tipo== Relatorio.DESPESA){
             for(int i=0;i<this.desp.length;i++){
-            this.pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+                System.out.println("%%:"+CategoriaDespesa.categorias.values()[i]+"::"+this.desp[i]);
+                this.pieChartData.add(new PieChart.Data(
+                    ""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
+            
            }
         }else{
-            for(int i=0;i<this.desp.length;i++){
-            this.pieChartData.set(i, new PieChart.Data(""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
+            for(int i=0;i<this.rec.length;i++){
+                System.out.println("%%"+CategoriaReceita.categorias.values()[i]+"::"+this.rec[i]);
+                this.pieChartData.add( new PieChart.Data(
+                        ""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
             }
         }
        
@@ -77,12 +82,12 @@ import javafx.scene.chart.PieChart;
     public void update(Observable o, Object arg) {
         mineracao();
         
-        if(this.tipo== Relatorio.DESPESA){
+        if(super.tipo== Relatorio.DESPESA){
             for(int i=0;i<this.desp.length;i++){
             this.pieChartData.set(i, new PieChart.Data(""+CategoriaDespesa.categorias.values()[i] ,this.desp[i]));
            }
         }else{
-            for(int i=0;i<this.desp.length;i++){
+            for(int i=0;i<this.rec.length;i++){
             this.pieChartData.set(i, new PieChart.Data(""+CategoriaReceita.categorias.values()[i] ,this.rec[i]));
             }
         }

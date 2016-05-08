@@ -4,11 +4,6 @@ import Financas.*;
 import java.util.Iterator;
 import java.util.Observer;
 import javafx.scene.chart.Chart;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  * @author Winny S
  */
@@ -18,9 +13,9 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
     protected double desp[];
     protected double rec[];
     protected Chart grafico;
-    protected int tipo = 0;
-    public static  int RECEITA=1;
+    protected int tipo;
     public static  int DESPESA=0;
+    public static  int RECEITA=1;
 
     Relatorio(Contabilidade con,int tipo){
         this();
@@ -31,26 +26,27 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
         }else{
             this.titulo = "Receita";
         }
-        
-        
+        this.tipo=tipo;
         mineracao();
     }
     Relatorio(Contabilidade con){
         this();
         this.contas = con;
         this.contas.addObserver(this);
-         mineracao();
+        mineracao();
     }
     Relatorio(){
-      this.desp = new double[CategoriaDespesa.categorias.values().length];
-      this.rec = new double[CategoriaDespesa.categorias.values().length];
-      for(int i=0;i<desp.length;i++){
-          this.desp[i]=0;
-      }
-      for(int i=0;i<desp.length;i++){
-          this.rec[i]=0;
-      }
-      
+        tipo = 0;  
+        this.desp = new double[CategoriaDespesa.categorias.values().length];
+        this.rec = new double[CategoriaReceita.categorias.values().length];
+        for(int i=0;i<desp.length;i++){
+            this.desp[i]=0;
+        }
+        for(int i=0;i<rec.length;i++){
+            this.rec[i]=0;
+        }
+          System.out.println(desp.length+" "+rec.length);
+    
     }
     public abstract Chart  geraGrafico();
     /**
@@ -62,7 +58,7 @@ public abstract class Relatorio /*extends Application*/ implements Observer  {
        for(int i=0;i<desp.length;i++){
           this.desp[i]=0;
       }
-        for(int i=0;i<desp.length;i++){
+        for(int i=0;i<rec.length;i++){
           this.rec[i]=0;
       }
        Iterator<Financa> it = this.contas.getFinancas().iterator();  //= financas.iterator();
