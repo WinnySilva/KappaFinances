@@ -218,9 +218,11 @@
             </Container>
             <Component class="javax.swing.JLabel" name="editar">
               <Properties>
+                <Property name="displayedMnemonic" type="int" value="101"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/Images/application_edit.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="editar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="deletar">
@@ -228,6 +230,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/Images/cross.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="excluir"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="deletarMouseClicked"/>
@@ -344,7 +347,8 @@
             </Component>
             <Component class="javax.swing.JButton" name="submit">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Submit"/>
+                <Property name="text" type="java.lang.String" value="Submeter"/>
+                <Property name="toolTipText" type="java.lang.String" value="submeter"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submitActionPerformed"/>

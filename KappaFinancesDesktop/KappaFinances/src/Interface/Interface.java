@@ -256,9 +256,12 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        editar.setDisplayedMnemonic('e');
         editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/application_edit.png"))); // NOI18N
+        editar.setToolTipText("editar");
 
         deletar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/cross.png"))); // NOI18N
+        deletar.setToolTipText("excluir");
         deletar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 deletarMouseClicked(evt);
@@ -324,7 +327,8 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        submit.setText("Submit");
+        submit.setText("Submeter");
+        submit.setToolTipText("submeter");
         submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitActionPerformed(evt);

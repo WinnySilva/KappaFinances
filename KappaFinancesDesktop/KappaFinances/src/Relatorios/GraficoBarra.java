@@ -17,8 +17,8 @@ import javafx.scene.chart.XYChart;
  */
 public class GraficoBarra extends Relatorio {
     private final String  labelX  = "Categorias", labelY = "Valor(R$)";
-    XYChart.Series series1;
-
+    private XYChart.Series series1;
+    private BarChart<String,Number> gb;
     public GraficoBarra(Contabilidade con,int tipo){
         super(con, tipo);
     }
@@ -37,7 +37,7 @@ public class GraficoBarra extends Relatorio {
         bc.setTitle(super.titulo);
         xAxis.setLabel(labelX);       
         yAxis.setLabel(labelY);
- 
+       
         series1 = new XYChart.Series();
        // series1.setName(label);       
         if(super.tipo== Relatorio.DESPESA){
@@ -53,6 +53,7 @@ public class GraficoBarra extends Relatorio {
         }
         bc.setLegendVisible(false);
         bc.getData().addAll(series1);
+        gb = bc;
         return bc;
     }
     @Override
@@ -75,8 +76,8 @@ public class GraficoBarra extends Relatorio {
                             ""+CategoriaReceita.categorias.values()[i]  , rec[i] ));
                     } 
                 }
+                
             }
-        
         });
         
    }
