@@ -527,8 +527,8 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
-        
-        if((this.txtValor.getText().isEmpty()) /*||(!this.txtValor.getText().matches("([0-9])*")  )*/)   {
+        System.out.println(this.txtValor.getText());
+        if((this.txtValor.getText().isEmpty()) ||(!this.txtValor.getText().matches("^([,.\\d]+)([,.]\\d{2})$")  ))   {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.");
             return;
         }
