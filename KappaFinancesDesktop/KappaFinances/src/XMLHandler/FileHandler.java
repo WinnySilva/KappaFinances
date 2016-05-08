@@ -285,10 +285,11 @@ public class FileHandler {
         else
         {
             System.out.println("ESSE MES EXISTE na posicao " + position);
-            xml = xml.replaceFirst("<"+month+year+">(\n)*</"+month+year+">\n", 
-                    "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
-//            xml = xml.replaceFirst("<"+month+year+">(\n|.)*</"+month+year+">\n", 
+//            xml = xml.replaceFirst("<"+month+year+">(\n)*</"+month+year+">\n", 
 //                    "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
+            
+            xml = xml.replaceFirst("<"+month+year+">(\n|.)*</"+month+year+">\n", 
+                    "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
             
         }
     //    System.out.println(xml+"\n------------------\n");
