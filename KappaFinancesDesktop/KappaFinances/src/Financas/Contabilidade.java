@@ -42,6 +42,12 @@ public class Contabilidade extends Observable
         } 
     
     }
+   public void setFinancas(ArrayList<Financa> al){
+       this.array= al;
+       carregarValores();
+       setChanged();
+       notifyObservers();
+   }
     
     public Contabilidade(double saldoTotal, double despesasTotais)
     {
