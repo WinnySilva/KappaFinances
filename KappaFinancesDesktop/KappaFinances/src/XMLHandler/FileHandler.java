@@ -6,7 +6,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.util.Calendar;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Classe para manipulação do arquivo XML.
@@ -27,7 +25,6 @@ public class FileHandler {
     private String xml;
     private final File fileXML;
     
-    
     public FileHandler()
     {
         this.filepath = "finances.xml";
@@ -39,7 +36,7 @@ public class FileHandler {
             
             try
             {
-                // Cria e adiciona a primeira linha ao XML
+                // Cria e adiciona a primeira linha ao XML (linha obrigatória)
                 new File("finances.xml").createNewFile();
 
                 BufferedWriter buffWrite = new BufferedWriter(new FileWriter(this.filepath));
@@ -51,7 +48,6 @@ public class FileHandler {
             {
                 System.err.println("Error in create file");
             }
-            
         }
         
         this.xml = this.readXML();  // Carrega o arquivo xml
@@ -73,7 +69,6 @@ public class FileHandler {
         //Carrega e atualiza o vetor de financas do mês corrente
         ArrayList<Financa> array;
         array = this.loadMonth(month, year);
-//        System.out.println("array= " + array);
         array.add(financa);
         
         //Salva o mês atualizado no XML
@@ -112,7 +107,7 @@ public class FileHandler {
      * @param month Mês desejado
      * @param year Ano do mês desejado
      * @return Caso exista o mês e o ano: Array com as Finanças
-     *         Caso não exista: arrayList vazio
+     *         Caso não exista: ArrayList vazio
      */
     public ArrayList<Financa> loadMonth(String month, int year)
     {
@@ -137,7 +132,6 @@ public class FileHandler {
         }
         int y = xml.indexOf("</"+month+year+">");
         String financesXML = xml.substring(x+10, y);
-       // System.out.println(financesXML);
         ArrayList<Financa> retArray = (ArrayList<Financa>) stream.fromXML(financesXML);
         
         return retArray;
@@ -175,10 +169,10 @@ public class FileHandler {
     }
     
     /**
-     * Função que transforma um inteiro em um mês do ano
+     * Método auxiliar que transforma um inteiro em um mês do ano
      * 
      * 
-     * @param m Mês (int)
+     * @param m Mês (inteiro)
      * @return Mês em inglês, só as 3 primeiras letras em maiúsculo
      */
     private String intToMonth(int m)
@@ -255,7 +249,7 @@ public class FileHandler {
      */
     public void saveLastMonth(ArrayList<Financa> finances)
     {
-        // Cria o stream e gera apelidos para as tags do XML
+        // Cria o Xstream e gera apelidos para as tags do XML
         XStream stream = new XStream(new DomDriver());
         stream.alias("financas", List.class);
         stream.alias("receita", Receita.class);
@@ -274,29 +268,21 @@ public class FileHandler {
         
         //Verifica se o mês e o ano já existem no XML
         //Caso exista: Atualiza o mês/ano
-        //Casoo não exista: Cria o mês/ano e já adiciona a finança
+        //Caso não exista: Cria o mês/ano e já adiciona a finança
         int position = xml.indexOf(month+year);
         if (position == -1)
         {
-            System.out.println("ESSE MES NAO EXISTE");
             xml = xml.replaceFirst("<list>\n", "<list>\n<"+month+year+">\n"+
                    stream.toXML(finances)+"\n"+"</"+month+year+">\n" );
         }
         else
         {
-            System.out.println("ESSE MES EXISTE na posicao " + position);
             xml = xml.substring(0,xml.indexOf("<"+month+year+">")) 
                     +"<"+month+year+">" +"\n"
                     +stream.toXML(finances) +"\n"
                     +xml.substring(xml.indexOf("</"+month+year+">"),xml.length())
-                    +"\n";
-            
-          //  xml = xml.replaceFirst("<"+month+year+">(\n|.)*</"+month+year+">\n", 
-//                    "<"+month+year+">\n"+stream.toXML(finances)+"\n</"+month+year+">\n");
-            
+                    +"\n";        
         }
-    //    System.out.println(xml+"\n------------------\n");
-        
         try
         {
             //Atualiza o arquivo XML
