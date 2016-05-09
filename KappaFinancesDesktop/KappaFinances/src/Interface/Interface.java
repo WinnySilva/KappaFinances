@@ -12,6 +12,7 @@ import Relatorios.GraficoPizza;
 import Relatorios.Relatorio;
 import XMLHandler.*;
 import java.awt.BorderLayout;
+import java.text.DateFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -105,6 +106,9 @@ public class Interface extends javax.swing.JFrame {
             System.out.println("EXCESSAO FATAL DETECTADA");
         }
         this.txtfSaldo.setValue(this.ContabilidadeInterface.getSaldo());
+        DateFormatSymbols dfs = new DateFormatSymbols();
+
+        this.jtext_mes.setText( dfs.getMonths()[ Calendar.getInstance().get(Calendar.MONTH) ] );
     }
 
     
@@ -188,6 +192,8 @@ public class Interface extends javax.swing.JFrame {
         txtListaFinancas = new javax.swing.JComboBox<String>();
         submit = new javax.swing.JButton();
         txtValor = new javax.swing.JFormattedTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jtext_mes = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -343,16 +349,17 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("MÊS");
+
+        jtext_mes.setEditable(false);
+        jtext_mes.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtext_mes.setToolTipText("");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(bdespesa)
-                .addGap(18, 18, 18)
-                .addComponent(breceita)
-                .addContainerGap(119, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -365,7 +372,21 @@ public class Interface extends javax.swing.JFrame {
                         .addComponent(txtValor))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(submit)))
+                        .addComponent(submit))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(71, 71, 71)
+                                .addComponent(bdespesa)
+                                .addGap(18, 18, 18)
+                                .addComponent(breceita))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addComponent(jtext_mes, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(130, 130, 130)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 99, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -388,7 +409,11 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
                 .addComponent(submit)
-                .addGap(125, 125, 125))
+                .addGap(40, 40, 40)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jtext_mes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel6, jLabel7});
@@ -719,6 +744,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGrpTipoFinanca;
     private javax.swing.JLabel deletar;
     private javax.swing.JLabel editar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -737,6 +763,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jtabela;
+    private javax.swing.JTextField jtext_mes;
     private javax.swing.JButton submit;
     private javax.swing.JTabbedPane tablegraficos;
     private javax.swing.JComboBox<String> txtListaFinancas;
