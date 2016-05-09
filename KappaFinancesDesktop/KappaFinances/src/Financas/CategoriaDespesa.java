@@ -13,7 +13,15 @@ package Financas;
 public class CategoriaDespesa 
 {
     private int categoriaDespesa;
-     public enum categorias
+    
+    /*
+    OPÇOES DE CATEGORIA
+    VESTUARIO = 0; ENERGIA = 1; AGUA = 2; INTERNET = 3; ALUGUEL = 4; 
+    REMEDIOS = 5; LAZER = 6; EDUCACAO = 7; ALIMENTOS = 8; 
+    PRODUTOS_DOMESTICOS = 9; TRANSPORTE = 10; COMBUSTIVEL = 11; 
+    BENS_DURAVEIS = 12;
+    */
+    public enum categorias
     {
         VESTUARIO, ENERGIA, AGUA, INTERNET, ALUGUEL, REMEDIOS, LAZER,
         EDUCACAO, ALIMENTOS, PRODUTOS_DOMESTICOS, TRANSPORTE, COMBUSTIVEL,

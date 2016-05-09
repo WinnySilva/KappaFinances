@@ -17,25 +17,29 @@ public class Receita extends Financa
 {
     private CategoriaReceita receita;
     
-    
+    /*
+    Construtor default;
+    */
     public Receita()
     {
         this.value = 0;
         this.data = Calendar.getInstance();
         receita = new CategoriaReceita();
     }
-    
+    /*
+    Construtor principal;
+    Inicializa os atributos herdados de finança;
+    data = recebe ano/mes/dia da transação;
+    value = valor da transação;
+    */
     public Receita(Calendar date, double value, int categoria)
     {
-        int year, month, day;
-        
         this.data = Calendar.getInstance();
-        year = date.get(Calendar.YEAR);
-        month = date.get(Calendar.MONTH);
-        day = date.get(Calendar.DAY_OF_MONTH);
-        this.data.set(year, month, day);
+        this.data.set(date.get(Calendar.YEAR), 
+                date.get(Calendar.MONTH), 
+                date.get(Calendar.DAY_OF_MONTH));
         this.value = value;
-        receita = new CategoriaReceita(categoria);
+        this.receita = new CategoriaReceita(categoria);
     }
     
     public void setCategoria(int categoria)

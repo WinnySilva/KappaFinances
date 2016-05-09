@@ -12,7 +12,11 @@ package Financas;
  */
 public class CategoriaReceita 
 {
-    
+    /*
+    OPÇOES DE CATEGORIA
+    SALARIO = 0;
+    RENDA_ALTERNATIVA = 1;
+    */
    private int categoriaReceita;
     public enum categorias
    {
