@@ -30,16 +30,21 @@ public class GraficoBarra extends Relatorio {
     }
     @Override
     public Chart geraGrafico() {
+        //cria o eixo X do gráfico
         final CategoryAxis xAxis = new CategoryAxis();
+        // cria o eixo Y do gráfico
         final NumberAxis yAxis = new NumberAxis();
+        //cria o gráfico de barra do JavaFX
         final BarChart<String,Number> bc = 
             new BarChart<String,Number>(xAxis,yAxis);
+        // seta o titulo do gráfico
         bc.setTitle(super.titulo);
+        //seta os eixos do gráfico
         xAxis.setLabel(labelX);       
         yAxis.setLabel(labelY);
-       
+        //instacia a lista de dados do gráfico
         series1 = new XYChart.Series();
-       // series1.setName(label);       
+       //teste qual dados o gráfico deve mostrar
         if(super.tipo== Relatorio.DESPESA){
             for(int i=0;i<this.desp.length;i++){
             series1.getData().add(new XYChart.Data(
@@ -51,11 +56,20 @@ public class GraficoBarra extends Relatorio {
                     ""+CategoriaReceita.categorias.values()[i]  ,   this.rec[i] ));
             } 
         }
+        //torna a legenda de cores não visivel
         bc.setLegendVisible(false);
+        //adiciona os dados ao gráfico para ser exibido
         bc.getData().addAll(series1);
+        //guarda a referencia ao gráfico no atributo da classe
         gb = bc;
         return bc;
     }
+    /**
+     * chamado quando há alterações na classe observada. Este método gera uma 
+     * thread que atualiza os dados do grafico de acordo com o tipo do gráfico
+     * @param o
+     * @param arg 
+     */
     @Override
     public void update(Observable o, Object arg) {
         mineracao();

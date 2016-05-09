@@ -52,7 +52,12 @@ import javafx.scene.chart.PieChart;
         this.grafico = chart;
         return chart;
     }
-
+    /**
+     * chamado quando há alterações na classe observada. Este método gera uma 
+     * thread que atualiza os dados do grafico de acordo com o tipo do gráfico
+     * @param o
+     * @param arg 
+     */
     @Override
     public void update(Observable o, Object arg) {
         mineracao();
