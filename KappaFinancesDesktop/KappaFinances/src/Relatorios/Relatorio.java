@@ -48,7 +48,8 @@ public abstract class Relatorio  implements Observer  {
         mineracao();
     }
     /**
-     * construtor interno ao pacote
+     * construtor interno ao pacote, inicializa os vetores de despesa e receita
+     * e os zera
      */
     protected Relatorio(){
         tipo = 0;  
@@ -61,9 +62,17 @@ public abstract class Relatorio  implements Observer  {
             this.rec[i]=0;
         }
     }
+    /**
+     * utiliza os vetores com os valores de totais das categorias de receita e 
+     * despesa para gerar o gráfico do tipo da classe especializada.
+     * Pode ser chamada apenas uma vez, pois o gráfico se atualiza de acordo com
+     * a classe observada
+     * @return grafico - retorna um grafico da classe especializada 
+     */
     public abstract Chart  geraGrafico();
     /**
-     * Atualiza os valores totais das categorias
+     * Atualiza os valores dos vetores de valores totais das categorias de acordo
+     * com o array de financas do objeto observado
      * 
      */
    protected void mineracao(){
