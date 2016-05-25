@@ -22,7 +22,7 @@ import java.util.GregorianCalendar;
 public class DateConverterTo implements Converter {
 
     private final SimpleDateFormat formatter = new SimpleDateFormat(
-            "MMMM dd, yyyy HH:mm:ss");
+            "yyyy-MM-dd");
 
     /**
      * Método que recebe a classe na qual a classe DateConverterTo irá
