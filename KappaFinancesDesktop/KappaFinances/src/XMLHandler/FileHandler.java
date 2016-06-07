@@ -6,13 +6,18 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe para manipulação do arquivo XML.
@@ -240,6 +245,55 @@ public class FileHandler {
         }
         return ret;
     }
+    
+    /**
+     * Método que salva o XML em um caminho especificado.
+     * 
+     * @param path Caminho que o XML será salvo
+     */
+    public void saveXML(String path)
+    {
+        File newFile = new File(path+fileXML.getName());
+        File pathF = new File(path);
+        if(pathF.exists())
+        {
+            try {
+                copyFile(fileXML, newFile);
+            } catch (IOException ex) {
+                Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            System.err.println("Directory do not exists.");
+        }
+        
+    }
+    
+    /**
+     * Método auxiliar para copiar o arquivo XML
+     * 
+     * @param source Caminho do arquivo XML atual
+     * @param destination Caminho de destino do XML
+     * @throws IOException Erro no copiamento do arquivo
+     */
+    private static void copyFile(File source, File destination) throws IOException {
+        if (destination.exists())
+            destination.delete();
+        FileChannel sourceChannel = null;
+        FileChannel destinationChannel = null;
+        try {
+            sourceChannel = new FileInputStream(source).getChannel();
+            destinationChannel = new FileOutputStream(destination).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(),
+                    destinationChannel);
+        } finally {
+            if (sourceChannel != null && sourceChannel.isOpen())
+                sourceChannel.close();
+            if (destinationChannel != null && destinationChannel.isOpen())
+                destinationChannel.close();
+       }
+   }
     
     /**
      * Salva o último mês de finanças no XML.
