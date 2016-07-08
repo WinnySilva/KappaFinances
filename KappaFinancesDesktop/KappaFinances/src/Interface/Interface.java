@@ -239,6 +239,11 @@ public class Interface extends javax.swing.JFrame {
                 jPanel8MouseClicked(evt);
             }
         });
+        jtabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabela_clicada(evt);
+            }
+        });
 
         jtabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -715,14 +720,22 @@ public class Interface extends javax.swing.JFrame {
         }else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha para deletar.");
         }
-    }                                    
+    }
+    private void tabela_clicada(java.awt.event.MouseEvent evt){
+        System.out.println("TABELA CLICADA "+jtabela.getSelectedRow() );
+        String valor = ""+jtabela.getValueAt(jtabela.getSelectedRow(),1);
+        valor = valor.replace("-R$ " , "");
+        valor = valor.replace("." , "");
+        this.txtValor.setText(valor);
+        //this.txtListaFinancas.getSelectedItem()
+        this.txtListaFinancas.setSelectedItem( jtabela.getValueAt(jtabela.getSelectedRow(),0 ) );
+    }
 
     private void editarMouseClicked(java.awt.event.MouseEvent evt) {                                    
         if((this.txtValor.getText().isEmpty()) ||(!this.txtValor.getText().matches("^([,.\\d]+)([,.]\\d{2})$")  ))   {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.");
             return;
         }
-
         
         DefaultTableModel tabela = (DefaultTableModel) jtabela.getModel();
 
