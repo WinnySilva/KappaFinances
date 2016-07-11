@@ -725,6 +725,9 @@ public class Interface extends javax.swing.JFrame {
         System.out.println("TABELA CLICADA "+jtabela.getSelectedRow() );
         String valor = ""+jtabela.getValueAt(jtabela.getSelectedRow(),1);
         valor = valor.replace("-R$ " , "");
+        valor = valor.replace("-" , "");
+        valor = valor.replace("R$" , "");
+        valor = valor.replace(" " , "");
         valor = valor.replace("." , "");
         this.txtValor.setText(valor);
         //this.txtListaFinancas.getSelectedItem()
